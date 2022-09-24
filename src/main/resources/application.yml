@@ -6,3 +6,6 @@ open:
   api:
     url: ${OPEN-API-URL}
     key: ${OPEN-API-KEY}
+---
+server:
+  port: 5000

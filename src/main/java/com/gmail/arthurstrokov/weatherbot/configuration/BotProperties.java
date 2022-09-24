@@ -13,7 +13,7 @@ import javax.annotation.PostConstruct;
  * @created 24.09.2022
  */
 @Configuration
-@PropertySource("classpath:values.properties")
+@PropertySource("classpath:application.yml")
 public class BotProperties {
 
     private final Environment environment;

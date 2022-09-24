@@ -1,0 +1,8 @@
+bot:
+  name: ${BOT-NAME}
+  token: ${TOKEN}
+  chatId: ${CHAT-ID}
+open:
+  api:
+    url: ${OPEN-API-URL}
+    key: ${OPEN-API-KEY}

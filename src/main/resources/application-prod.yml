@@ -4,8 +4,11 @@ bot:
   chatId: ${CHAT-ID}
 open:
   api:
-    url: ${OPEN-API-URL}
     key: ${OPEN-API-KEY}
+    url:
+      weather:
+        current: ${CURRENT}
+        five-day: ${FIVE-DAY}
 ---
 server:
   port: 5000

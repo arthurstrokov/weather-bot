@@ -1,6 +1,7 @@
 package com.gmail.arthurstrokov.weatherbot.service;
 
 import com.gmail.arthurstrokov.weatherbot.configuration.OpenApiProperties;
+import com.gmail.arthurstrokov.weatherbot.dto.WeatherForecastDto;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
@@ -26,13 +27,22 @@ public class OpenWeatherApiService {
     private final RestTemplate restTemplate;
     private final OpenApiProperties openApiProperties;
 
-    public void getWeather() {
-        String getResourceUrl = openApiProperties.getOpenApiUrl() + openApiProperties.getOpenApiKey();
-        ResponseEntity<String> responseEntity = restTemplate.getForEntity(getResourceUrl, String.class);
+    public void getCurrentWeather() {
+        String getUrl = openApiProperties.getCurrentWeatherDataUrl() + openApiProperties.getOpenApiKey();
+        ResponseEntity<String> responseEntity = restTemplate.getForEntity(getUrl, String.class);
         String weather = Objects.requireNonNull(responseEntity.getBody());
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         JsonElement je = JsonParser.parseString(weather);
         String prettyJsonString = gson.toJson(je);
         log.info(prettyJsonString);
+    }
+
+    public WeatherForecastDto getWeatherForecastData() {
+        String getUrl = openApiProperties.getFiveDayWeatherForecastUrl() + openApiProperties.getOpenApiKey();
+        ResponseEntity<String> responseEntity = restTemplate.getForEntity(getUrl, String.class);
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        WeatherForecastDto weatherForecastDto = gson.fromJson(responseEntity.getBody(), WeatherForecastDto.class);
+        log.info(weatherForecastDto.toString());
+        return weatherForecastDto;
     }
 }

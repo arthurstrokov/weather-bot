@@ -23,8 +23,8 @@ public class OpenWeatherApiController {
     private final OpenApiProperties openApiProperties;
 
     @RequestMapping
-    public ResponseEntity<?> getWeatherBody() {
-        String getResourceUrl = openApiProperties.getOpenApiUrl() + openApiProperties.getOpenApiKey();
+    public ResponseEntity<?> getCurrentWeatherDataBody() {
+        String getResourceUrl = openApiProperties.getCurrentWeatherDataUrl() + openApiProperties.getOpenApiKey();
         ResponseEntity<String> responseEntity = restTemplate.getForEntity(getResourceUrl, String.class);
         return new ResponseEntity<>(responseEntity, HttpStatus.OK);
     }

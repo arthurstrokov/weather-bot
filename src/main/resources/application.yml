@@ -1,11 +1,5 @@
-bot:
-  name: ${BOT-NAME}
-  token: ${TOKEN}
-  chatId: ${CHAT-ID}
-open:
-  api:
-    url: ${OPEN-API-URL}
-    key: ${OPEN-API-KEY}
----
-server:
-  port: 5000
+spring:
+  application:
+    name: weather-bot
+  profiles:
+    active: prod

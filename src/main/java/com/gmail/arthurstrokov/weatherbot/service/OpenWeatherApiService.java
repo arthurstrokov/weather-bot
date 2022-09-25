@@ -27,7 +27,7 @@ public class OpenWeatherApiService {
     private final OpenApiProperties openApiProperties;
 
     public void getWeather() {
-        String getResourceUrl = openApiProperties.getUrl() + openApiProperties.getKey();
+        String getResourceUrl = openApiProperties.getOpenApiUrl() + openApiProperties.getOpenApiKey();
         ResponseEntity<String> responseEntity = restTemplate.getForEntity(getResourceUrl, String.class);
         String weather = Objects.requireNonNull(responseEntity.getBody());
         Gson gson = new GsonBuilder().setPrettyPrinting().create();

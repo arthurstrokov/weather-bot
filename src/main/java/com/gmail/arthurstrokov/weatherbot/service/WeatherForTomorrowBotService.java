@@ -60,6 +60,6 @@ public class WeatherForTomorrowBotService extends TelegramLongPollingBot {
     @Override
     public String getBotToken() {
         // Return bot token from BotFather
-        return botProperties.getToken();
+        return botProperties.getBotToken();
     }
 }

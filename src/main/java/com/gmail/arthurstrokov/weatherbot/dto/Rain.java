@@ -1,10 +1,9 @@
 package com.gmail.arthurstrokov.weatherbot.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
-
-import java.util.ArrayList;
 
 /**
  * @author Arthur Strokov
@@ -13,10 +12,7 @@ import java.util.ArrayList;
  */
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class WeatherForecastDto {
-    String cod;
-    int message;
-    int cnt;
-    ArrayList<List> list;
-    City city;
+public class Rain {
+    @JsonProperty("3h")
+    double _3h;
 }

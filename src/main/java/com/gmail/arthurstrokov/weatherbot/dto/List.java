@@ -13,10 +13,15 @@ import java.util.ArrayList;
  */
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class WeatherForecastDto {
-    String cod;
-    int message;
-    int cnt;
-    ArrayList<List> list;
-    City city;
+public class List {
+    int dt;
+    Main main;
+    ArrayList<Weather> weather;
+    Clouds clouds;
+    Wind wind;
+    int visibility;
+    double pop;
+    Sys sys;
+    String dt_txt;
+    Rain rain;
 }

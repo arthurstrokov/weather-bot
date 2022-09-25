@@ -1,6 +1,7 @@
 package com.gmail.arthurstrokov.weatherbot.service;
 
 import com.gmail.arthurstrokov.weatherbot.configuration.OpenApiProperties;
+import com.gmail.arthurstrokov.weatherbot.dto.List;
 import com.gmail.arthurstrokov.weatherbot.dto.WeatherForecastDto;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 /**
@@ -27,7 +29,7 @@ public class OpenWeatherApiService {
     private final RestTemplate restTemplate;
     private final OpenApiProperties openApiProperties;
 
-    public void getCurrentWeather() {
+    public String getCurrentWeather() {
         String getUrl = openApiProperties.getCurrentWeatherDataUrl() + openApiProperties.getOpenApiKey();
         ResponseEntity<String> responseEntity = restTemplate.getForEntity(getUrl, String.class);
         String weather = Objects.requireNonNull(responseEntity.getBody());
@@ -35,14 +37,28 @@ public class OpenWeatherApiService {
         JsonElement je = JsonParser.parseString(weather);
         String prettyJsonString = gson.toJson(je);
         log.info(prettyJsonString);
+        return prettyJsonString;
     }
 
-    public WeatherForecastDto getWeatherForecastData() {
+    public String getWeatherForecastData() {
         String getUrl = openApiProperties.getFiveDayWeatherForecastUrl() + openApiProperties.getOpenApiKey();
         ResponseEntity<String> responseEntity = restTemplate.getForEntity(getUrl, String.class);
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Gson gson = new GsonBuilder().create();
         WeatherForecastDto weatherForecastDto = gson.fromJson(responseEntity.getBody(), WeatherForecastDto.class);
-        log.info(weatherForecastDto.toString());
-        return weatherForecastDto;
+        return formatMessage(weatherForecastDto);
+    }
+
+    private String formatMessage(WeatherForecastDto weatherForecastDto) {
+        ArrayList<List> list = weatherForecastDto.getList();
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("city: ").append(weatherForecastDto.getCity().getName()).append("\n");
+        list.forEach(x -> stringBuilder
+                .append("---").append("\n")
+                .append("temp: ").append(x.getMain().getTemp()).append(" ")
+                .append("feels_like: ").append(x.getMain().getFeels_like()).append("\n")
+                .append(x.getClouds()).append("\n")
+                .append("rain: ").append(x.getRain()).append("\n")
+        );
+        return stringBuilder.toString();
     }
 }

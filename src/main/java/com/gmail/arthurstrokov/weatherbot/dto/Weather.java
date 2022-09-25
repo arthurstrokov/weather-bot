@@ -4,8 +4,6 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
-import java.util.ArrayList;
-
 /**
  * @author Arthur Strokov
  * @email arthurstrokov@gmail.com
@@ -13,10 +11,9 @@ import java.util.ArrayList;
  */
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class WeatherForecastDto {
-    String cod;
-    int message;
-    int cnt;
-    ArrayList<List> list;
-    City city;
+public class Weather {
+    int id;
+    String main;
+    String description;
+    String icon;
 }

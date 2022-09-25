@@ -1,7 +1,6 @@
 package com.gmail.arthurstrokov.weatherbot.service;
 
 import com.gmail.arthurstrokov.weatherbot.configuration.BotProperties;
-import com.gmail.arthurstrokov.weatherbot.dto.WeatherForecastDto;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -32,18 +31,19 @@ public class WeatherForTomorrowBotService extends TelegramLongPollingBot {
         if (update.hasMessage() && update.getMessage().hasText()) {
             long chatId = update.getMessage().getChatId();
             if (update.getMessage().getText().equals("/start")) {
-                WeatherForecastDto weatherForecastData = openWeatherApiService.getWeatherForecastData();
+                String weatherForecastData = openWeatherApiService.getWeatherForecastData();
                 sendMsg(chatId, weatherForecastData);
             } else if (update.getMessage().getText().equals("/test")) {
-                openWeatherApiService.getCurrentWeather();
+                String currentWeather = openWeatherApiService.getCurrentWeather();
+                sendMsg(chatId, currentWeather);
             }
         }
     }
 
-    private void sendMsg(Long chatId, WeatherForecastDto weatherForecastDto) {
+    private void sendMsg(Long chatId, String text) {
         SendMessage message = SendMessage.builder() // Create a message object
                 .chatId(chatId)
-                .text(weatherForecastDto.toString())
+                .text(text)
                 .build();
         try {
             execute(message); // Sending our message object to user

@@ -46,6 +46,7 @@ public class WeatherForTomorrowBotService extends TelegramLongPollingBot {
                 String currentWeatherByGeographicCoordinates =
                         openWeatherApiService.getCurrentWeatherByGeographicCoordinates(latitude, longitude);
                 sendMsg(chatId, currentWeatherByGeographicCoordinates);
+                sendMsg(chatId, location.toString());
 
             } else if (update.getMessage().getText().equals("/start")) {
                 String weatherForecastDataByCity = openWeatherApiService.getWeatherForecastDataByCity();

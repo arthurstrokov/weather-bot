@@ -31,8 +31,10 @@ public class OpenWeatherApiService {
     private final RestTemplate restTemplate;
     private final OpenApiProperties openApiProperties;
 
-    public String getCurrentWeather() {
-        String getUrl = openApiProperties.getCurrentWeatherDataUrl() + openApiProperties.getOpenApiKey();
+    public String getCurrentWeatherByCity() {
+        String getUrl = openApiProperties.getOpenApiBaseUrl() +
+                openApiProperties.getCurrentWeatherDataUrl() +
+                openApiProperties.getOpenApiKey();
         ResponseEntity<String> responseEntity = restTemplate.getForEntity(getUrl, String.class);
         String weather = Objects.requireNonNull(responseEntity.getBody());
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -42,9 +44,23 @@ public class OpenWeatherApiService {
         return prettyJsonString;
     }
 
-    public String getWeatherForecastData() {
-        String getUrl = openApiProperties.getFiveDayWeatherForecastUrl() + openApiProperties.getOpenApiKey();
-        ResponseEntity<String> responseEntity = restTemplate.getForEntity(getUrl, String.class);
+    public String getWeatherForecastDataByCity() {
+        String url = openApiProperties.getOpenApiBaseUrl() +
+                openApiProperties.getFiveDayWeatherForecastUrlByCity() +
+                openApiProperties.getOpenApiKey();
+        ResponseEntity<String> responseEntity = restTemplate.getForEntity(url, String.class);
+        Gson gson = new GsonBuilder().create();
+        WeatherForecastDto weatherForecastDto = gson.fromJson(responseEntity.getBody(), WeatherForecastDto.class);
+        return formatMessage(weatherForecastDto);
+    }
+
+    public String getWeatherForecastDataByGeographicCoordinates(Double longitude, Double latitude) {
+        String url = openApiProperties.getOpenApiBaseUrl() +
+                openApiProperties.getFiveDayWeatherForecastUrlByGeographicCoordinates()
+                        .replace("{lon}", String.valueOf(longitude))
+                        .replace("{lat}", String.valueOf(latitude)) +
+                openApiProperties.getOpenApiKey();
+        ResponseEntity<String> responseEntity = restTemplate.getForEntity(url, String.class);
         Gson gson = new GsonBuilder().create();
         WeatherForecastDto weatherForecastDto = gson.fromJson(responseEntity.getBody(), WeatherForecastDto.class);
         return formatMessage(weatherForecastDto);
@@ -53,7 +69,7 @@ public class OpenWeatherApiService {
     private String formatMessage(WeatherForecastDto weatherForecastDto) {
         ArrayList<List> list = weatherForecastDto.getList();
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("city: ").append(weatherForecastDto.getCity().getName()).append("\n");
+        stringBuilder.append("\n").append("city: ").append(weatherForecastDto.getCity().getName()).append("\n");
         list.forEach(x -> stringBuilder
                 .append("---").append("\n")
                 .append("Temp: ").append(x.getMain().getTemp()).append(" ")
@@ -64,6 +80,7 @@ public class OpenWeatherApiService {
                 .append("Rain: ").append(x.getRain()).append("\n")
                 .append(x.getDt_txt()).append("\n")
         );
+        log.info(stringBuilder.toString());
         return stringBuilder.toString();
     }
 }

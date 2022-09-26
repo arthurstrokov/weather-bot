@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.objects.Location;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
@@ -16,6 +16,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 /**
@@ -34,22 +35,33 @@ public class WeatherForTomorrowBotService extends TelegramLongPollingBot {
     @SneakyThrows
     @Override
     public void onUpdateReceived(Update update) {
+        // Check if the update has a location
+        Optional<Location> location = Optional.ofNullable(update.getMessage().getLocation());
+        log.info(location.toString());
         // We check if the update has a message and the message has text
-        Message message = update.getMessage();
-        if (update.hasMessage() && message.hasText()) {
-            if (message.getText().equals("/start")) {
-                String weatherForecastData = openWeatherApiService.getWeatherForecastData();
-                sendMsg(message, weatherForecastData);
+        if (update.hasMessage()) {
+            long chatId = update.getMessage().getChatId();
+            if (update.getMessage().hasLocation()) {
+                Double longitude = update.getMessage().getLocation().getLongitude();
+                Double latitude = update.getMessage().getLocation().getLatitude();
+                String weatherForecastDataByGeographicCoordinates =
+                        openWeatherApiService.getWeatherForecastDataByGeographicCoordinates(longitude, latitude);
+                sendMsg(chatId, weatherForecastDataByGeographicCoordinates);
+
+            } else if (update.getMessage().getText().equals("/start")) {
+                String weatherForecastDataByCity = openWeatherApiService.getWeatherForecastDataByCity();
+                sendMsg(chatId, weatherForecastDataByCity);
+
             } else if (update.getMessage().getText().equals("/test")) {
-                String currentWeather = openWeatherApiService.getCurrentWeather();
-                sendMsg(message, currentWeather);
+                String currentWeatherByCity = openWeatherApiService.getCurrentWeatherByCity();
+                sendMsg(chatId, currentWeatherByCity);
             }
         }
     }
 
-    private void sendMsg(Message message, String text) {
+    private void sendMsg(long chatId, String text) {
         SendMessage sendMessage = SendMessage.builder() // Create a message object
-                .chatId(message.getChatId())
+                .chatId(chatId)
                 .text(text)
                 .build();
         try {
@@ -71,8 +83,14 @@ public class WeatherForTomorrowBotService extends TelegramLongPollingBot {
         List<KeyboardRow> keyboardRowList = new ArrayList<>();
         KeyboardRow keyboardFirstRow = new KeyboardRow();
 
+        KeyboardButton keyboardButton = new KeyboardButton();
+        keyboardButton.setText("/loc");
+        keyboardButton.setRequestLocation(true);
+
+        keyboardFirstRow.add(keyboardButton);
         keyboardFirstRow.add(new KeyboardButton("/start"));
         keyboardFirstRow.add(new KeyboardButton("/test"));
+
         keyboardRowList.add(keyboardFirstRow);
         replyKeyboardMarkup.setKeyboard(keyboardRowList);
     }

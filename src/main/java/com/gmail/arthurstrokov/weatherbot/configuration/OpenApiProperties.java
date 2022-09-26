@@ -15,8 +15,12 @@ public class OpenApiProperties {
 
     @Value("${open.api.key}")
     private String openApiKey;
-    @Value("${open.api.url.weather.current}")
+    @Value("${open.api.base-url}")
+    private String openApiBaseUrl;
+    @Value("${open.api.url.current}")
     private String currentWeatherDataUrl;
-    @Value("${open.api.url.weather.five-day}")
-    private String fiveDayWeatherForecastUrl;
+    @Value("${open.api.url.five-day-city}")
+    private String fiveDayWeatherForecastUrlByCity;
+    @Value("${open.api.url.five-day-gc}")
+    private String fiveDayWeatherForecastUrlByGeographicCoordinates;
 }

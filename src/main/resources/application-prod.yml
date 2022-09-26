@@ -9,6 +9,7 @@ open:
     base-url: ${BASE-URL}
     url:
       current: ${CURRENT}
+      current-gc: ${CURRENT-GC}
       five-day-city: ${FIVE-DAY-CITY}
       five-day-gc: ${FIVE-DAY-GC}
 ---

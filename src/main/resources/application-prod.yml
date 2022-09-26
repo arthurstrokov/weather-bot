@@ -2,13 +2,15 @@ bot:
   name: ${BOT-NAME}
   token: ${TOKEN}
   chatId: ${CHAT-ID}
+---
 open:
   api:
     key: ${OPEN-API-KEY}
+    base-url: ${BASE-URL}
     url:
-      weather:
-        current: ${CURRENT}
-        five-day: ${FIVE-DAY}
+      current: ${CURRENT}
+      five-day-city: ${FIVE-DAY-CITY}
+      five-day-gc: ${FIVE-DAY-GC}
 ---
 server:
   port: 5000

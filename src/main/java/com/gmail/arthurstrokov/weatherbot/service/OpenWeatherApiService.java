@@ -32,10 +32,25 @@ public class OpenWeatherApiService {
     private final OpenApiProperties openApiProperties;
 
     public String getCurrentWeatherByCity() {
-        String getUrl = openApiProperties.getOpenApiBaseUrl() +
-                openApiProperties.getCurrentWeatherDataUrl() +
+        String url = openApiProperties.getOpenApiBaseUrl() +
+                openApiProperties.getCurrentWeatherDataUrlByCity() +
                 openApiProperties.getOpenApiKey();
-        ResponseEntity<String> responseEntity = restTemplate.getForEntity(getUrl, String.class);
+        ResponseEntity<String> responseEntity = restTemplate.getForEntity(url, String.class);
+        String weather = Objects.requireNonNull(responseEntity.getBody());
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        JsonElement je = JsonParser.parseString(weather);
+        String prettyJsonString = gson.toJson(je);
+        log.info(prettyJsonString);
+        return prettyJsonString;
+    }
+
+    public String getCurrentWeatherByGeographicCoordinates(Double latitude, Double longitude) {
+        String url = openApiProperties.getOpenApiBaseUrl() +
+                openApiProperties.getCurrentWeatherDataUrlByGeographicCoordinates()
+                        .replace("{lat}", String.valueOf(latitude))
+                        .replace("{lon}", String.valueOf(longitude)) +
+                openApiProperties.getOpenApiKey();
+        ResponseEntity<String> responseEntity = restTemplate.getForEntity(url, String.class);
         String weather = Objects.requireNonNull(responseEntity.getBody());
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         JsonElement je = JsonParser.parseString(weather);

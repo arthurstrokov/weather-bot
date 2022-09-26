@@ -2,7 +2,6 @@ package com.gmail.arthurstrokov.weatherbot.service;
 
 import com.gmail.arthurstrokov.weatherbot.configuration.BotProperties;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -32,7 +31,6 @@ public class WeatherForTomorrowBotService extends TelegramLongPollingBot {
     private final BotProperties botProperties;
     private final OpenWeatherApiService openWeatherApiService;
 
-    @SneakyThrows
     @Override
     public void onUpdateReceived(Update update) {
         // Check if the update has a location
@@ -41,12 +39,13 @@ public class WeatherForTomorrowBotService extends TelegramLongPollingBot {
         // We check if the update has a message and the message has text
         if (update.hasMessage()) {
             long chatId = update.getMessage().getChatId();
+
             if (update.getMessage().hasLocation()) {
                 Double latitude = update.getMessage().getLocation().getLatitude();
                 Double longitude = update.getMessage().getLocation().getLongitude();
-                String weatherForecastDataByGeographicCoordinates =
-                        openWeatherApiService.getWeatherForecastDataByGeographicCoordinates(latitude, longitude);
-                sendMsg(chatId, weatherForecastDataByGeographicCoordinates);
+                String currentWeatherByGeographicCoordinates =
+                        openWeatherApiService.getCurrentWeatherByGeographicCoordinates(latitude, longitude);
+                sendMsg(chatId, currentWeatherByGeographicCoordinates);
 
             } else if (update.getMessage().getText().equals("/start")) {
                 String weatherForecastDataByCity = openWeatherApiService.getWeatherForecastDataByCity();
@@ -83,11 +82,16 @@ public class WeatherForTomorrowBotService extends TelegramLongPollingBot {
         List<KeyboardRow> keyboardRowList = new ArrayList<>();
         KeyboardRow keyboardFirstRow = new KeyboardRow();
 
-        KeyboardButton keyboardButton = new KeyboardButton();
-        keyboardButton.setText("/loc");
-        keyboardButton.setRequestLocation(true);
+        KeyboardButton keyboardButtonLoc = new KeyboardButton();
+        keyboardButtonLoc.setText("/loc");
+        keyboardButtonLoc.setRequestLocation(true);
 
-        keyboardFirstRow.add(keyboardButton);
+        KeyboardButton keyboardButtonCur = new KeyboardButton();
+        keyboardButtonCur.setText("/cur");
+        keyboardButtonCur.setRequestLocation(true);
+
+//        keyboardFirstRow.add(keyboardButtonLoc);TODO Register the button
+        keyboardFirstRow.add(keyboardButtonCur);
         keyboardFirstRow.add(new KeyboardButton("/start"));
         keyboardFirstRow.add(new KeyboardButton("/test"));
 

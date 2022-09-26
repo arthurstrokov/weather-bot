@@ -42,10 +42,10 @@ public class WeatherForTomorrowBotService extends TelegramLongPollingBot {
         if (update.hasMessage()) {
             long chatId = update.getMessage().getChatId();
             if (update.getMessage().hasLocation()) {
-                Double longitude = update.getMessage().getLocation().getLongitude();
                 Double latitude = update.getMessage().getLocation().getLatitude();
+                Double longitude = update.getMessage().getLocation().getLongitude();
                 String weatherForecastDataByGeographicCoordinates =
-                        openWeatherApiService.getWeatherForecastDataByGeographicCoordinates(longitude, latitude);
+                        openWeatherApiService.getWeatherForecastDataByGeographicCoordinates(latitude, longitude);
                 sendMsg(chatId, weatherForecastDataByGeographicCoordinates);
 
             } else if (update.getMessage().getText().equals("/start")) {

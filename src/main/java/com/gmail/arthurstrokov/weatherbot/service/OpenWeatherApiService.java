@@ -54,11 +54,11 @@ public class OpenWeatherApiService {
         return formatMessage(weatherForecastDto);
     }
 
-    public String getWeatherForecastDataByGeographicCoordinates(Double longitude, Double latitude) {
+    public String getWeatherForecastDataByGeographicCoordinates(Double latitude, Double longitude) {
         String url = openApiProperties.getOpenApiBaseUrl() +
                 openApiProperties.getFiveDayWeatherForecastUrlByGeographicCoordinates()
-                        .replace("{lon}", String.valueOf(longitude))
-                        .replace("{lat}", String.valueOf(latitude)) +
+                        .replace("{lat}", String.valueOf(latitude))
+                        .replace("{lon}", String.valueOf(longitude)) +
                 openApiProperties.getOpenApiKey();
         ResponseEntity<String> responseEntity = restTemplate.getForEntity(url, String.class);
         Gson gson = new GsonBuilder().create();

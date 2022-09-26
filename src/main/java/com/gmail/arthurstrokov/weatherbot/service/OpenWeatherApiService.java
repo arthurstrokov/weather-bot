@@ -2,6 +2,7 @@ package com.gmail.arthurstrokov.weatherbot.service;
 
 import com.gmail.arthurstrokov.weatherbot.configuration.OpenApiProperties;
 import com.gmail.arthurstrokov.weatherbot.dto.List;
+import com.gmail.arthurstrokov.weatherbot.dto.Weather;
 import com.gmail.arthurstrokov.weatherbot.dto.WeatherForecastDto;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -15,6 +16,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * @author Arthur Strokov
@@ -54,10 +56,13 @@ public class OpenWeatherApiService {
         stringBuilder.append("city: ").append(weatherForecastDto.getCity().getName()).append("\n");
         list.forEach(x -> stringBuilder
                 .append("---").append("\n")
-                .append("temp: ").append(x.getMain().getTemp()).append(" ")
-                .append("feels_like: ").append(x.getMain().getFeels_like()).append("\n")
+                .append("Temp: ").append(x.getMain().getTemp()).append(" ")
+                .append("Feels_like: ").append(x.getMain().getFeels_like()).append("\n")
+                .append(x.getWeather().stream().map(Weather::getMain).collect(Collectors.toList())).append(": ")
+                .append(x.getWeather().stream().map(Weather::getDescription).collect(Collectors.toList())).append("\n")
                 .append(x.getClouds()).append("\n")
-                .append("rain: ").append(x.getRain()).append("\n")
+                .append("Rain: ").append(x.getRain()).append("\n")
+                .append(x.getDt_txt()).append("\n")
         );
         return stringBuilder.toString();
     }

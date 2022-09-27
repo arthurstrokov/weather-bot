@@ -1,6 +1,8 @@
 package com.gmail.arthurstrokov.weatherbot.startup;
 
 import com.gmail.arthurstrokov.weatherbot.configuration.BotProperties;
+import com.gmail.arthurstrokov.weatherbot.configuration.OpenApiProperties;
+import com.gmail.arthurstrokov.weatherbot.gateway.OpenWeatherApiClient;
 import com.gmail.arthurstrokov.weatherbot.service.OpenWeatherApiService;
 import com.gmail.arthurstrokov.weatherbot.service.WeatherForTomorrowBotService;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,8 @@ public class ApplicationRunnerImpl implements ApplicationRunner {
 
     private final BotProperties botProperties;
     private final OpenWeatherApiService openWeatherApiService;
+    private final OpenWeatherApiClient openWeatherApiClient;
+    private final OpenApiProperties openApiProperties;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -29,7 +33,12 @@ public class ApplicationRunnerImpl implements ApplicationRunner {
             // Create the TelegramBotsApi object to register your bots
             TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
             // Register your newly created AbilityBot
-            botsApi.registerBot(new WeatherForTomorrowBotService(botProperties, openWeatherApiService));
+            botsApi.registerBot(new WeatherForTomorrowBotService(
+                    botProperties,
+                    openWeatherApiService,
+                    openWeatherApiClient,
+                    openApiProperties
+            ));
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }

@@ -1,6 +1,8 @@
 package com.gmail.arthurstrokov.weatherbot.service;
 
 import com.gmail.arthurstrokov.weatherbot.configuration.BotProperties;
+import com.gmail.arthurstrokov.weatherbot.configuration.OpenApiProperties;
+import com.gmail.arthurstrokov.weatherbot.gateway.OpenWeatherApiClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -30,6 +32,8 @@ public class WeatherForTomorrowBotService extends TelegramLongPollingBot {
 
     private final BotProperties botProperties;
     private final OpenWeatherApiService openWeatherApiService;
+    private final OpenWeatherApiClient openWeatherApiClient;
+    private final OpenApiProperties openApiProperties;
 
     @Override
     public void onUpdateReceived(Update update) {
@@ -49,7 +53,7 @@ public class WeatherForTomorrowBotService extends TelegramLongPollingBot {
                 sendMsg(chatId, weatherForecastDataByCity);
 
             } else if (update.getMessage().getText().equals("/test")) {
-                String currentWeatherByCity = openWeatherApiService.getCurrentWeatherByCity();
+                String currentWeatherByCity = openWeatherApiClient.getCurrentWeatherByCity(openApiProperties.getCityName(), openApiProperties.getOpenApiKey());
                 sendMsg(chatId, currentWeatherByCity);
             }
         }

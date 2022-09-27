@@ -33,12 +33,18 @@ public class OpenWeatherApiService {
     private final RestTemplate restTemplate;
     private final OpenApiProperties openApiProperties;
 
+    private static final String CITY_NAME = "q";
+    private static final String RESPONSE_FORMAT = "mode";
+    private static final String UNITS_OF_MEASUREMENT = "units";
+    private static final String NUMBER_OF_TIMESTAMPS = "cnt";
+    private static final String APPID = "appid";
+
     public String getCurrentWeatherByCity() {
         String url = UriComponentsBuilder.fromHttpUrl(openApiProperties.getCurrentWeatherDataUrl())
-                .queryParam("q", "Minsk")
-                .queryParam("mode", "json")
-                .queryParam("units", "metric")
-                .queryParam("appid", openApiProperties.getOpenApiKey())
+                .queryParam(CITY_NAME, openApiProperties.getCityName())
+                .queryParam(RESPONSE_FORMAT, openApiProperties.getMode())
+                .queryParam(UNITS_OF_MEASUREMENT, openApiProperties.getUnits())
+                .queryParam(APPID, openApiProperties.getOpenApiKey())
                 .encode().toUriString();
         ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, null, String.class);
         String weather = Objects.requireNonNull(responseEntity.getBody());
@@ -51,9 +57,9 @@ public class OpenWeatherApiService {
         String url = UriComponentsBuilder.fromHttpUrl(openApiProperties.getCurrentWeatherDataUrl())
                 .queryParam("lat", latitude)
                 .queryParam("lon", longitude)
-                .queryParam("mode", "json")
-                .queryParam("units", "metric")
-                .queryParam("appid", openApiProperties.getOpenApiKey())
+                .queryParam(CITY_NAME, openApiProperties.getCityName())
+                .queryParam(UNITS_OF_MEASUREMENT, openApiProperties.getUnits())
+                .queryParam(APPID, openApiProperties.getOpenApiKey())
                 .encode().toUriString();
         ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, null, String.class);
         String weather = Objects.requireNonNull(responseEntity.getBody());
@@ -64,11 +70,11 @@ public class OpenWeatherApiService {
 
     public String getWeatherForecastDataByCity() {
         String url = UriComponentsBuilder.fromHttpUrl(openApiProperties.getFiveDayWeatherForecastDataUrl())
-                .queryParam("q", "Minsk")
-                .queryParam("mode", "json")
-                .queryParam("units", "metric")
-                .queryParam("cnt", 4)
-                .queryParam("appid", openApiProperties.getOpenApiKey())
+                .queryParam(CITY_NAME, openApiProperties.getCityName())
+                .queryParam(RESPONSE_FORMAT, openApiProperties.getMode())
+                .queryParam(UNITS_OF_MEASUREMENT, openApiProperties.getUnits())
+                .queryParam(NUMBER_OF_TIMESTAMPS, openApiProperties.getCnt())
+                .queryParam(APPID, openApiProperties.getOpenApiKey())
                 .encode().toUriString();
         ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, null, String.class);
         Gson gson = new GsonBuilder().create();
@@ -80,10 +86,10 @@ public class OpenWeatherApiService {
         String url = UriComponentsBuilder.fromHttpUrl(openApiProperties.getFiveDayWeatherForecastDataUrl())
                 .queryParam("lat", latitude)
                 .queryParam("lon", longitude)
-                .queryParam("mode", "json")
-                .queryParam("units", "metric")
-                .queryParam("cnt", 4)
-                .queryParam("appid", openApiProperties.getOpenApiKey())
+                .queryParam(RESPONSE_FORMAT, openApiProperties.getMode())
+                .queryParam(UNITS_OF_MEASUREMENT, openApiProperties.getUnits())
+                .queryParam(NUMBER_OF_TIMESTAMPS, openApiProperties.getCnt())
+                .queryParam(APPID, openApiProperties.getOpenApiKey())
                 .encode().toUriString();
         ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, null, String.class);
         Gson gson = new GsonBuilder().create();

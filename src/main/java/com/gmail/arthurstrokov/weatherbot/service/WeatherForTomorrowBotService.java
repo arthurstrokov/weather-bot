@@ -33,13 +33,10 @@ public class WeatherForTomorrowBotService extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-        // Check if the update has a location
-        Optional<Location> location = Optional.ofNullable(update.getMessage().getLocation());
-        log.info(location.toString());
         // We check if the update has a message and the message has text
         if (update.hasMessage()) {
             long chatId = update.getMessage().getChatId();
-
+            // Check if the update has a location
             if (update.getMessage().hasLocation()) {
                 Double latitude = update.getMessage().getLocation().getLatitude();
                 Double longitude = update.getMessage().getLocation().getLongitude();

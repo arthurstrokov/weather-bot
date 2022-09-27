@@ -7,12 +7,14 @@ open:
   api:
     key: ${OPEN-API-KEY}
     url:
-      current-day-url: ${CURRENT-DAY-URL}
-      five-day-url: ${FIVE-DAY-URL}
+      base-url: ${BASE-URL}
     parameters:
+      current: /weather
+      forecast: /forecast
       city: Minsk
       mode: json
       units: metric
+      lang: en
       cnt: 4
 ---
 server:

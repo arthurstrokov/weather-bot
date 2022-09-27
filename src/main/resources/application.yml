@@ -1,14 +1,16 @@
 spring:
+  main:
+    banner-mode: off
   application:
     name: weather-bot
   profiles:
-    active: prod
+    active: dev
 
 logging:
   level:
     org:
       springframework:
-        web: DEBUG
-        boot: DEBUG
+        web: INFO
+        boot: INFO
       hibernate: ERROR
     com.gmail.arthurstrokov.weatherbot: DEBUG

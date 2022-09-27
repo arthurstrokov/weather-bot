@@ -2,7 +2,6 @@ package com.gmail.arthurstrokov.weatherbot.service;
 
 import com.gmail.arthurstrokov.weatherbot.configuration.BotProperties;
 import com.gmail.arthurstrokov.weatherbot.configuration.OpenApiProperties;
-import com.gmail.arthurstrokov.weatherbot.gateway.OpenWeatherApiClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -29,9 +28,8 @@ import java.util.List;
 public class WeatherForTomorrowBotService extends TelegramLongPollingBot {
 
     private final BotProperties botProperties;
-    private final OpenWeatherApiService openWeatherApiService;
-    private final OpenWeatherApiClient openWeatherApiClient;
     private final OpenApiProperties openApiProperties;
+    private final OpenWeatherApiService openWeatherApiService;
 
     @Override
     public void onUpdateReceived(Update update) {
@@ -43,15 +41,36 @@ public class WeatherForTomorrowBotService extends TelegramLongPollingBot {
                 Double latitude = update.getMessage().getLocation().getLatitude();
                 Double longitude = update.getMessage().getLocation().getLongitude();
                 String currentWeatherByGeographicCoordinates =
-                        openWeatherApiService.getCurrentWeatherByGeographicCoordinates(latitude, longitude);
+                        openWeatherApiService.getWeatherForecastByGeographicCoordinates(
+                                String.valueOf(latitude),
+                                String.valueOf(longitude),
+                                openApiProperties.getMode(),
+                                openApiProperties.getUnits(),
+                                openApiProperties.getLang(),
+                                openApiProperties.getCnt(),
+                                openApiProperties.getOpenApiKey());
                 sendMsg(chatId, currentWeatherByGeographicCoordinates);
 
             } else if (update.getMessage().getText().equals("/start")) {
-                String weatherForecastDataByCity = openWeatherApiService.getWeatherForecastDataByCity();
+                String weatherForecastDataByCity = openWeatherApiService.getWeatherForecastByCity(
+                        openApiProperties.getCityName(),
+                        openApiProperties.getMode(),
+                        openApiProperties.getUnits(),
+                        openApiProperties.getLang(),
+                        openApiProperties.getCnt(),
+                        openApiProperties.getOpenApiKey()
+                );
                 sendMsg(chatId, weatherForecastDataByCity);
 
             } else if (update.getMessage().getText().equals("/test")) {
-                String currentWeatherByCity = openWeatherApiClient.getCurrentWeatherByCity(openApiProperties.getCityName(), openApiProperties.getOpenApiKey());
+                String currentWeatherByCity =
+                        openWeatherApiService.getCurrentWeatherByCity(
+                                openApiProperties.getCityName(),
+                                openApiProperties.getMode(),
+                                openApiProperties.getUnits(),
+                                openApiProperties.getLang(),
+                                openApiProperties.getOpenApiKey()
+                        );
                 sendMsg(chatId, currentWeatherByCity);
             }
         }

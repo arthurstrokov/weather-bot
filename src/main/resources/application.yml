@@ -3,3 +3,12 @@ spring:
     name: weather-bot
   profiles:
     active: prod
+
+logging:
+  level:
+    org:
+      springframework:
+        web: DEBUG
+        boot: DEBUG
+      hibernate: ERROR
+    com.gmail.arthurstrokov.weatherbot: DEBUG

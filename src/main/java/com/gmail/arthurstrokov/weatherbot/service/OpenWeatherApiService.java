@@ -10,9 +10,11 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -31,51 +33,65 @@ public class OpenWeatherApiService {
     private final RestTemplate restTemplate;
     private final OpenApiProperties openApiProperties;
 
+    private static final String CITY_NAME = "q";
+    private static final String RESPONSE_FORMAT = "mode";
+    private static final String UNITS_OF_MEASUREMENT = "units";
+    private static final String NUMBER_OF_TIMESTAMPS = "cnt";
+    private static final String APPID = "appid";
+
     public String getCurrentWeatherByCity() {
-        String url = openApiProperties.getOpenApiBaseUrl() +
-                openApiProperties.getCurrentWeatherDataUrlByCity() +
-                openApiProperties.getOpenApiKey();
-        ResponseEntity<String> responseEntity = restTemplate.getForEntity(url, String.class);
+        String url = UriComponentsBuilder.fromHttpUrl(openApiProperties.getCurrentWeatherDataUrl())
+                .queryParam(CITY_NAME, openApiProperties.getCityName())
+                .queryParam(RESPONSE_FORMAT, openApiProperties.getMode())
+                .queryParam(UNITS_OF_MEASUREMENT, openApiProperties.getUnits())
+                .queryParam(APPID, openApiProperties.getOpenApiKey())
+                .encode().toUriString();
+        ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, null, String.class);
         String weather = Objects.requireNonNull(responseEntity.getBody());
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         JsonElement je = JsonParser.parseString(weather);
-        String prettyJsonString = gson.toJson(je);
-        log.info(prettyJsonString);
-        return prettyJsonString;
+        return gson.toJson(je);
     }
 
     public String getCurrentWeatherByGeographicCoordinates(Double latitude, Double longitude) {
-        String url = openApiProperties.getOpenApiBaseUrl() +
-                openApiProperties.getCurrentWeatherDataUrlByGeographicCoordinates()
-                        .replace("{lat}", String.valueOf(latitude))
-                        .replace("{lon}", String.valueOf(longitude)) +
-                openApiProperties.getOpenApiKey();
-        ResponseEntity<String> responseEntity = restTemplate.getForEntity(url, String.class);
+        String url = UriComponentsBuilder.fromHttpUrl(openApiProperties.getCurrentWeatherDataUrl())
+                .queryParam("lat", latitude)
+                .queryParam("lon", longitude)
+                .queryParam(CITY_NAME, openApiProperties.getCityName())
+                .queryParam(UNITS_OF_MEASUREMENT, openApiProperties.getUnits())
+                .queryParam(APPID, openApiProperties.getOpenApiKey())
+                .encode().toUriString();
+        ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, null, String.class);
         String weather = Objects.requireNonNull(responseEntity.getBody());
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         JsonElement je = JsonParser.parseString(weather);
-        String prettyJsonString = gson.toJson(je);
-        log.info(prettyJsonString);
-        return prettyJsonString;
+        return gson.toJson(je);
     }
 
     public String getWeatherForecastDataByCity() {
-        String url = openApiProperties.getOpenApiBaseUrl() +
-                openApiProperties.getFiveDayWeatherForecastUrlByCity() +
-                openApiProperties.getOpenApiKey();
-        ResponseEntity<String> responseEntity = restTemplate.getForEntity(url, String.class);
+        String url = UriComponentsBuilder.fromHttpUrl(openApiProperties.getFiveDayWeatherForecastDataUrl())
+                .queryParam(CITY_NAME, openApiProperties.getCityName())
+                .queryParam(RESPONSE_FORMAT, openApiProperties.getMode())
+                .queryParam(UNITS_OF_MEASUREMENT, openApiProperties.getUnits())
+                .queryParam(NUMBER_OF_TIMESTAMPS, openApiProperties.getCnt())
+                .queryParam(APPID, openApiProperties.getOpenApiKey())
+                .encode().toUriString();
+        ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, null, String.class);
         Gson gson = new GsonBuilder().create();
         WeatherForecastDto weatherForecastDto = gson.fromJson(responseEntity.getBody(), WeatherForecastDto.class);
         return formatMessage(weatherForecastDto);
     }
 
     public String getWeatherForecastDataByGeographicCoordinates(Double latitude, Double longitude) {
-        String url = openApiProperties.getOpenApiBaseUrl() +
-                openApiProperties.getFiveDayWeatherForecastUrlByGeographicCoordinates()
-                        .replace("{lat}", String.valueOf(latitude))
-                        .replace("{lon}", String.valueOf(longitude)) +
-                openApiProperties.getOpenApiKey();
-        ResponseEntity<String> responseEntity = restTemplate.getForEntity(url, String.class);
+        String url = UriComponentsBuilder.fromHttpUrl(openApiProperties.getFiveDayWeatherForecastDataUrl())
+                .queryParam("lat", latitude)
+                .queryParam("lon", longitude)
+                .queryParam(RESPONSE_FORMAT, openApiProperties.getMode())
+                .queryParam(UNITS_OF_MEASUREMENT, openApiProperties.getUnits())
+                .queryParam(NUMBER_OF_TIMESTAMPS, openApiProperties.getCnt())
+                .queryParam(APPID, openApiProperties.getOpenApiKey())
+                .encode().toUriString();
+        ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, null, String.class);
         Gson gson = new GsonBuilder().create();
         WeatherForecastDto weatherForecastDto = gson.fromJson(responseEntity.getBody(), WeatherForecastDto.class);
         return formatMessage(weatherForecastDto);

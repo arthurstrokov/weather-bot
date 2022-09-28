@@ -31,16 +31,20 @@ class OpenWeatherApiControllerTest {
      * Method under test: {@link OpenWeatherApiController#getCurrentWeatherDataBody()}
      */
     @Test
-    void testGetCurrentWeatherDataBody() throws Exception {
+    void testGetCurrentWeatherDataBody() {
         when(restTemplate.getForEntity((String) any(), (Class<?>) any(), (Object[]) any()))
                 .thenReturn(new ResponseEntity<>(HttpStatus.CONTINUE));
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/");
-        MockMvcBuilders.standaloneSetup(openWeatherApiController)
-                .build()
-                .perform(requestBuilder)
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
-                .andExpect(MockMvcResultMatchers.content()
-                        .json("{\"headers\":{},\"body\":null,\"statusCodeValue\":100,\"statusCode\":\"CONTINUE\"}"));
+        try {
+            MockMvcBuilders.standaloneSetup(openWeatherApiController)
+                    .build()
+                    .perform(requestBuilder)
+                    .andExpect(MockMvcResultMatchers.status().isOk())
+                    .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
+                    .andExpect(MockMvcResultMatchers.content()
+                            .json("{\"headers\":{},\"body\":null,\"statusCodeValue\":100,\"statusCode\":\"CONTINUE\"}"));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.gmail.arthurstrokov.weatherbot.aspect;
 
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -46,16 +47,17 @@ public class LoggingAspect {
     }
 
     @Around("servicePointcut()")
-    public Object logAroundService(ProceedingJoinPoint joinPoint) throws Throwable {
+    public Object logAroundService(ProceedingJoinPoint joinPoint) {
         return logAround(joinPoint);
     }
 
     @Around("controllerPointcut()")
-    public Object logAroundController(ProceedingJoinPoint joinPoint) throws Throwable {
+    public Object logAroundController(ProceedingJoinPoint joinPoint) {
         return logAround(joinPoint);
     }
 
-    private Object logAround(ProceedingJoinPoint joinPoint) throws Throwable {
+    @SneakyThrows
+    private Object logAround(ProceedingJoinPoint joinPoint) {
         if (log.isDebugEnabled()) {
             log.debug("Enter: {}.{}() with argument[s] = {}", joinPoint.getSignature().getDeclaringTypeName(),
                     joinPoint.getSignature().getName(), Arrays.toString(joinPoint.getArgs()));
@@ -74,8 +76,9 @@ public class LoggingAspect {
         }
     }
 
+    @SneakyThrows
     @Around("applicationPointcut()")
-    public Object logExecutionTime(ProceedingJoinPoint joinPoint) throws Throwable {
+    public Object logExecutionTime(ProceedingJoinPoint joinPoint) {
         final StopWatch stopWatch = new StopWatch();
         stopWatch.start();
         Object proceed = joinPoint.proceed();

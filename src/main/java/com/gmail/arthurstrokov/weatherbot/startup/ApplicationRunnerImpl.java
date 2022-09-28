@@ -26,7 +26,7 @@ public class ApplicationRunnerImpl implements ApplicationRunner {
     private final OpenWeatherApiService openWeatherApiService;
 
     @Override
-    public void run(ApplicationArguments args) throws Exception {
+    public void run(ApplicationArguments args) {
         try {
             // Create the TelegramBotsApi object to register your bots
             TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);

@@ -8,6 +8,6 @@ class WeatherWeatherForTomorrowBotServiceApplicationTests {
 
     @Test
     void contextLoads() {
+        // Check if context loaded
     }
-
 }

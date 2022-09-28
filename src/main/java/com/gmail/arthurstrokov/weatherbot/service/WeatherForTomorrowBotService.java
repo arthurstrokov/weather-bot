@@ -1,5 +1,6 @@
 package com.gmail.arthurstrokov.weatherbot.service;
 
+import com.gmail.arthurstrokov.weatherbot.aspect.NoLogging;
 import com.gmail.arthurstrokov.weatherbot.configuration.BotProperties;
 import com.gmail.arthurstrokov.weatherbot.configuration.OpenApiProperties;
 import lombok.RequiredArgsConstructor;
@@ -123,6 +124,7 @@ public class WeatherForTomorrowBotService extends TelegramLongPollingBot {
         return botProperties.getBotName();
     }
 
+    @NoLogging
     @Override
     public String getBotToken() {
         // Return bot token from BotFather

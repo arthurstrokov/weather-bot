@@ -52,7 +52,7 @@ public class WeatherForTomorrowBotService extends TelegramLongPollingBot {
                                 openApiProperties.getOpenApiKey());
                 sendMsg(chatId, currentWeatherByGeographicCoordinates);
 
-            } else if (update.getMessage().getText().equals("/start")) {
+            } else if (update.getMessage().getText().equals("/forecast")) {
                 String weatherForecastDataByCity = openWeatherApiService.getWeatherForecastByCity(
                         openApiProperties.getCityName(),
                         openApiProperties.getMode(),
@@ -73,6 +73,22 @@ public class WeatherForTomorrowBotService extends TelegramLongPollingBot {
                                 openApiProperties.getOpenApiKey()
                         );
                 sendMsg(chatId, currentWeatherByCity);
+
+            } else {
+                try {
+                    String city = update.getMessage().getText();
+                    String currentWeatherByCity =
+                            openWeatherApiService.getCurrentWeatherByCity(
+                                    city,
+                                    openApiProperties.getMode(),
+                                    openApiProperties.getUnits(),
+                                    openApiProperties.getLang(),
+                                    openApiProperties.getOpenApiKey()
+                            );
+                    sendMsg(chatId, currentWeatherByCity);
+                } catch (Exception e) {
+                    log.info(e.getMessage());
+                }
             }
         }
     }
@@ -102,16 +118,15 @@ public class WeatherForTomorrowBotService extends TelegramLongPollingBot {
         KeyboardRow keyboardFirstRow = new KeyboardRow();
 
         KeyboardButton keyboardButtonLoc = new KeyboardButton();
-        keyboardButtonLoc.setText("/loc");
+        keyboardButtonLoc.setText("/location");
         keyboardButtonLoc.setRequestLocation(true);
 
-        KeyboardButton keyboardButtonCur = new KeyboardButton();
-        keyboardButtonCur.setText("/cur");
+        KeyboardButton keyboardButtonCur = new KeyboardButton(); // TODO Register the button
+        keyboardButtonCur.setText("/current");
         keyboardButtonCur.setRequestLocation(true);
 
-//        keyboardFirstRow.add(keyboardButtonLoc);TODO Register the button
-        keyboardFirstRow.add(keyboardButtonCur);
-        keyboardFirstRow.add(new KeyboardButton("/start"));
+        keyboardFirstRow.add(keyboardButtonLoc);
+        keyboardFirstRow.add(new KeyboardButton("/forecast"));
         keyboardFirstRow.add(new KeyboardButton("/test"));
 
         keyboardRowList.add(keyboardFirstRow);

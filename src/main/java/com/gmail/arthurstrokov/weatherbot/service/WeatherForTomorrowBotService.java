@@ -78,11 +78,12 @@ public class WeatherForTomorrowBotService extends TelegramLongPollingBot {
                 try {
                     String city = update.getMessage().getText();
                     String currentWeatherByCity =
-                            openWeatherApiService.getCurrentWeatherByCity(
+                            openWeatherApiService.getWeatherForecastByCity(
                                     city,
                                     openApiProperties.getMode(),
                                     openApiProperties.getUnits(),
                                     openApiProperties.getLang(),
+                                    openApiProperties.getCnt(),
                                     openApiProperties.getOpenApiKey()
                             );
                     sendMsg(chatId, currentWeatherByCity);

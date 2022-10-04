@@ -1,8 +1,7 @@
 package com.gmail.arthurstrokov.weatherbot.startup;
 
 import com.gmail.arthurstrokov.weatherbot.configuration.BotProperties;
-import com.gmail.arthurstrokov.weatherbot.configuration.OpenApiProperties;
-import com.gmail.arthurstrokov.weatherbot.service.OpenWeatherApiService;
+import com.gmail.arthurstrokov.weatherbot.service.PrintService;
 import com.gmail.arthurstrokov.weatherbot.service.WeatherForTomorrowBotService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
@@ -22,8 +21,7 @@ import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 public class ApplicationRunnerImpl implements ApplicationRunner {
 
     private final BotProperties botProperties;
-    private final OpenApiProperties openApiProperties;
-    private final OpenWeatherApiService openWeatherApiService;
+    private final PrintService printService;
 
     @Override
     public void run(ApplicationArguments args) {
@@ -33,8 +31,7 @@ public class ApplicationRunnerImpl implements ApplicationRunner {
             // Register your newly created AbilityBot
             botsApi.registerBot(new WeatherForTomorrowBotService(
                     botProperties,
-                    openApiProperties,
-                    openWeatherApiService
+                    printService
             ));
         } catch (TelegramApiException e) {
             e.printStackTrace();

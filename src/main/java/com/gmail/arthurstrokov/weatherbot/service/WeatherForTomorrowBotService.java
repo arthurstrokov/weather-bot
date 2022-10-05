@@ -2,7 +2,6 @@ package com.gmail.arthurstrokov.weatherbot.service;
 
 import com.gmail.arthurstrokov.weatherbot.aspect.NoLogging;
 import com.gmail.arthurstrokov.weatherbot.configuration.BotProperties;
-import com.gmail.arthurstrokov.weatherbot.configuration.OpenApiProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -29,8 +28,7 @@ import java.util.List;
 public class WeatherForTomorrowBotService extends TelegramLongPollingBot {
 
     private final BotProperties botProperties;
-    private final OpenApiProperties openApiProperties;
-    private final OpenWeatherApiService openWeatherApiService;
+    private final PrintService printService;
 
     @Override
     public void onUpdateReceived(Update update) {
@@ -41,52 +39,22 @@ public class WeatherForTomorrowBotService extends TelegramLongPollingBot {
             if (update.getMessage().hasLocation()) {
                 Double latitude = update.getMessage().getLocation().getLatitude();
                 Double longitude = update.getMessage().getLocation().getLongitude();
-                String currentWeatherByGeographicCoordinates =
-                        openWeatherApiService.getWeatherForecastByGeographicCoordinates(
-                                String.valueOf(latitude),
-                                String.valueOf(longitude),
-                                openApiProperties.getMode(),
-                                openApiProperties.getUnits(),
-                                openApiProperties.getLang(),
-                                openApiProperties.getCnt(),
-                                openApiProperties.getOpenApiKey());
-                sendMsg(chatId, currentWeatherByGeographicCoordinates);
+                String weatherForecast = printService.printWeatherForecast(String.valueOf(latitude), String.valueOf(longitude));
+                sendMsg(chatId, weatherForecast);
 
             } else if (update.getMessage().getText().equals("/forecast")) {
-                String weatherForecastDataByCity = openWeatherApiService.getWeatherForecastByCity(
-                        openApiProperties.getCityName(),
-                        openApiProperties.getMode(),
-                        openApiProperties.getUnits(),
-                        openApiProperties.getLang(),
-                        openApiProperties.getCnt(),
-                        openApiProperties.getOpenApiKey()
-                );
-                sendMsg(chatId, weatherForecastDataByCity);
+                String weatherForecast = printService.printWeatherForecast();
+                sendMsg(chatId, weatherForecast);
 
             } else if (update.getMessage().getText().equals("/test")) {
-                String currentWeatherByCity =
-                        openWeatherApiService.getCurrentWeatherByCity(
-                                openApiProperties.getCityName(),
-                                openApiProperties.getMode(),
-                                openApiProperties.getUnits(),
-                                openApiProperties.getLang(),
-                                openApiProperties.getOpenApiKey()
-                        );
-                sendMsg(chatId, currentWeatherByCity);
+                String currentWeather = printService.printCurrentWeather();
+                sendMsg(chatId, currentWeather);
 
             } else {
                 try {
                     String city = update.getMessage().getText();
-                    String currentWeatherByCity =
-                            openWeatherApiService.getWeatherForecastByCity(
-                                    city,
-                                    openApiProperties.getMode(),
-                                    openApiProperties.getUnits(),
-                                    openApiProperties.getLang(),
-                                    openApiProperties.getCnt(),
-                                    openApiProperties.getOpenApiKey()
-                            );
-                    sendMsg(chatId, currentWeatherByCity);
+                    String weatherForecastByCity = printService.printWeatherForecast(city);
+                    sendMsg(chatId, weatherForecastByCity);
                 } catch (Exception e) {
                     log.info(e.getMessage());
                 }

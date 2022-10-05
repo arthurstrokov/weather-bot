@@ -1,0 +1,164 @@
+{
+  "cod": "200",
+  "message": 0,
+  "cnt": 4,
+  "list": [
+    {
+      "dt": 1664917200,
+      "main": {
+        "temp": 7.86,
+        "feels_like": 4.38,
+        "temp_min": 6.29,
+        "temp_max": 7.86,
+        "pressure": 1014,
+        "sea_level": 1014,
+        "grnd_level": 987,
+        "humidity": 86,
+        "temp_kf": 1.57
+      },
+      "weather": [
+        {
+          "id": 803,
+          "main": "Clouds",
+          "description": "broken clouds",
+          "icon": "04n"
+        }
+      ],
+      "clouds": {
+        "all": 53
+      },
+      "wind": {
+        "speed": 6.42,
+        "deg": 296,
+        "gust": 14.4
+      },
+      "visibility": 10000,
+      "pop": 0.01,
+      "sys": {
+        "pod": "n"
+      },
+      "dt_txt": "2022-10-04 21:00:00"
+    },
+    {
+      "dt": 1664928000,
+      "main": {
+        "temp": 7.09,
+        "feels_like": 3.89,
+        "temp_min": 5.56,
+        "temp_max": 7.09,
+        "pressure": 1015,
+        "sea_level": 1015,
+        "grnd_level": 989,
+        "humidity": 89,
+        "temp_kf": 1.53
+      },
+      "weather": [
+        {
+          "id": 802,
+          "main": "Clouds",
+          "description": "scattered clouds",
+          "icon": "03n"
+        }
+      ],
+      "clouds": {
+        "all": 47
+      },
+      "wind": {
+        "speed": 5.15,
+        "deg": 293,
+        "gust": 12.09
+      },
+      "visibility": 10000,
+      "pop": 0,
+      "sys": {
+        "pod": "n"
+      },
+      "dt_txt": "2022-10-05 00:00:00"
+    },
+    {
+      "dt": 1664938800,
+      "main": {
+        "temp": 7.35,
+        "feels_like": 4.25,
+        "temp_min": 7.09,
+        "temp_max": 7.35,
+        "pressure": 1016,
+        "sea_level": 1016,
+        "grnd_level": 991,
+        "humidity": 92,
+        "temp_kf": 0.26
+      },
+      "weather": [
+        {
+          "id": 803,
+          "main": "Clouds",
+          "description": "broken clouds",
+          "icon": "04n"
+        }
+      ],
+      "clouds": {
+        "all": 72
+      },
+      "wind": {
+        "speed": 5.06,
+        "deg": 290,
+        "gust": 11.27
+      },
+      "visibility": 10000,
+      "pop": 0,
+      "sys": {
+        "pod": "n"
+      },
+      "dt_txt": "2022-10-05 03:00:00"
+    },
+    {
+      "dt": 1664949600,
+      "main": {
+        "temp": 7,
+        "feels_like": 4.25,
+        "temp_min": 7,
+        "temp_max": 7,
+        "pressure": 1019,
+        "sea_level": 1019,
+        "grnd_level": 992,
+        "humidity": 93,
+        "temp_kf": 0
+      },
+      "weather": [
+        {
+          "id": 804,
+          "main": "Clouds",
+          "description": "overcast clouds",
+          "icon": "04d"
+        }
+      ],
+      "clouds": {
+        "all": 90
+      },
+      "wind": {
+        "speed": 4.13,
+        "deg": 273,
+        "gust": 9.17
+      },
+      "visibility": 10000,
+      "pop": 0,
+      "sys": {
+        "pod": "d"
+      },
+      "dt_txt": "2022-10-05 06:00:00"
+    }
+  ],
+  "city": {
+    "id": 625144,
+    "name": "Minsk",
+    "coord": {
+      "lat": 53.9,
+      "lon": 27.5667
+    },
+    "country": "BY",
+    "population": 1742124,
+    "timezone": 10800,
+    "sunrise": 1664856983,
+    "sunset": 1664898027
+  }
+}

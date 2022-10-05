@@ -1,7 +1,6 @@
 package com.gmail.arthurstrokov.weatherbot.service;
 
 import com.gmail.arthurstrokov.weatherbot.configuration.OpenApiProperties;
-import com.gmail.arthurstrokov.weatherbot.dto.WeatherForecastDto;
 import com.gmail.arthurstrokov.weatherbot.gateway.OpenWeatherApiClient;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -33,30 +32,22 @@ public class OpenWeatherApiService {
 
     public String getCurrentWeatherByCity(String cityName, String mode, String units, String lang, String appid) {
         String currentWeatherByCity = openWeatherApiClient.getCurrentWeatherByCity(cityName, mode, units, lang, appid);
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        JsonElement je = JsonParser.parseString(currentWeatherByCity);
-        return gson.toJson(je);
+        return prettyPrintingJsonString(currentWeatherByCity);
     }
 
     public String getCurrentWeatherByGeographicCoordinates(String lat, String lon, String mode, String units, String lang, String appid) {
         String currentWeatherByGeographicCoordinates = openWeatherApiClient.getCurrentWeatherByGeographicCoordinates(lat, lon, mode, units, lang, appid);
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        JsonElement je = JsonParser.parseString(currentWeatherByGeographicCoordinates);
-        return gson.toJson(je);
+        return prettyPrintingJsonString(currentWeatherByGeographicCoordinates);
     }
 
     public String getWeatherForecastByCity(String cityName, String mode, String units, String lang, String cnt, String appid) {
         String weatherForecastByCity = openWeatherApiClient.getWeatherForecastByCity(cityName, mode, units, lang, cnt, appid);
-        Gson gson = new GsonBuilder().create();
-        WeatherForecastDto weatherForecastDto = gson.fromJson(weatherForecastByCity, WeatherForecastDto.class);
-        return PrintService.formatMessage(weatherForecastDto);
+        return prettyPrintingJsonString(weatherForecastByCity);
     }
 
     public String getWeatherForecastByGeographicCoordinates(String lat, String lon, String mode, String units, String lang, String cnt, String appid) {
         String weatherForecastByGeographicCoordinates = openWeatherApiClient.getWeatherForecastByGeographicCoordinates(lat, lon, mode, units, lang, cnt, appid);
-        Gson gson = new GsonBuilder().create();
-        WeatherForecastDto weatherForecastDto = gson.fromJson(weatherForecastByGeographicCoordinates, WeatherForecastDto.class);
-        return PrintService.formatMessage(weatherForecastDto);
+        return prettyPrintingJsonString(weatherForecastByGeographicCoordinates);
     }
 
     @Deprecated
@@ -70,9 +61,7 @@ public class OpenWeatherApiService {
                 .encode().toUriString();
         ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, null, String.class);
         String weather = Objects.requireNonNull(responseEntity.getBody());
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        JsonElement je = JsonParser.parseString(weather);
-        return gson.toJson(je);
+        return prettyPrintingJsonString(weather);
     }
 
     @Deprecated
@@ -88,9 +77,7 @@ public class OpenWeatherApiService {
                 .encode().toUriString();
         ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, null, String.class);
         String weather = Objects.requireNonNull(responseEntity.getBody());
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        JsonElement je = JsonParser.parseString(weather);
-        return gson.toJson(je);
+        return prettyPrintingJsonString(weather);
     }
 
     @Deprecated
@@ -104,9 +91,8 @@ public class OpenWeatherApiService {
                 .queryParam(OpenApiProperties.APPID, openApiProperties.getOpenApiKey())
                 .encode().toUriString();
         ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, null, String.class);
-        Gson gson = new GsonBuilder().create();
-        WeatherForecastDto weatherForecastDto = gson.fromJson(responseEntity.getBody(), WeatherForecastDto.class);
-        return PrintService.formatMessage(weatherForecastDto);
+        String weather = Objects.requireNonNull(responseEntity.getBody());
+        return prettyPrintingJsonString(weather);
     }
 
     @Deprecated
@@ -121,8 +107,13 @@ public class OpenWeatherApiService {
                 .queryParam(OpenApiProperties.APPID, openApiProperties.getOpenApiKey())
                 .encode().toUriString();
         ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, null, String.class);
-        Gson gson = new GsonBuilder().create();
-        WeatherForecastDto weatherForecastDto = gson.fromJson(responseEntity.getBody(), WeatherForecastDto.class);
-        return PrintService.formatMessage(weatherForecastDto);
+        String weather = Objects.requireNonNull(responseEntity.getBody());
+        return prettyPrintingJsonString(weather);
+    }
+
+    private static String prettyPrintingJsonString(String s) {
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        JsonElement je = JsonParser.parseString(s);
+        return gson.toJson(je);
     }
 }

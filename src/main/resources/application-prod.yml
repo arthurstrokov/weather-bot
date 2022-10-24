@@ -18,4 +18,4 @@ open:
       cnt: 4
 ---
 server:
-  port: 5000
+  port: 8080

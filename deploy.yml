@@ -23,6 +23,31 @@ spec:
           env:
             - name: spring.mvc.servlet.path
               value: /weather-bot
+            - name: BOT-NAME
+              valueFrom:
+                secretKeyRef:
+                  name: weather-bot-secret
+                  key: BOT-NAME
+            - name: BOT-TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: weather-bot-secret
+                  key: BOT-TOKEN
+            - name: BOT-CHAT-ID
+              valueFrom:
+                secretKeyRef:
+                  name: weather-bot-secret
+                  key: BOT-CHAT-ID
+            - name: OPEN-API-KEY
+              valueFrom:
+                secretKeyRef:
+                  name: weather-bot-secret
+                  key: OPEN-API-KEY
+            - name: BASE-URL
+              valueFrom:
+                secretKeyRef:
+                  name: weather-bot-secret
+                  key: BASE-URL
           ports:
             - containerPort: 8080
 ---

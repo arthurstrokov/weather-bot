@@ -1,7 +1,7 @@
 bot:
   name: ${BOT-NAME}
-  token: ${TOKEN}
-  chatId: ${CHAT-ID}
+  token: ${BOT-TOKEN}
+  chatId: ${BOT-CHAT-ID}
 ---
 open:
   api:

@@ -31,7 +31,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'com.github.tomakehurst:wiremock:2.27.2'
+    testImplementation 'com.github.tomakehurst:wiremock:3.0.0'
 
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
@@ -40,12 +40,9 @@ dependencies {
 
     implementation 'org.telegram:telegrambots:6.1.0'
 
-    implementation 'org.hibernate:hibernate-validator:8.0.0.Final'
-
     implementation 'org.springframework.cloud:spring-cloud-starter-config'
     implementation 'org.springframework.cloud:spring-cloud-starter-bootstrap'
 
-    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
 }
 
@@ -64,8 +61,7 @@ docker {
         baseImage = 'openjdk:17-alpine'
         ports = [8080]
         images = [
-                'arthurstrokov/weather-bot:latest',
-                'arthurstrokov/weather-bot:v0.0.0'
+                'arthurstrokov/weather-bot:latest'
         ]
         jvmArgs = ['-Xmx2048m']
     }

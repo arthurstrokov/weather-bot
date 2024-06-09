@@ -17,8 +17,8 @@ spec:
         visualize: "true"
     spec:
       containers:
-        - name: translator-bot
-          image: arthurstrokov/weather-bot:v0.0.0
+        - name: weather-bot
+          image: arthurstrokov/weather-bot:latest
           imagePullPolicy: IfNotPresent
           env:
             - name: spring.mvc.servlet.path

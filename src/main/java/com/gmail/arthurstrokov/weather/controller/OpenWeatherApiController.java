@@ -1,11 +1,11 @@
 package com.gmail.arthurstrokov.weather.controller;
 
 import com.gmail.arthurstrokov.weather.configuration.OpenApiProperties;
-import com.gmail.arthurstrokov.weather.gateway.OpenWeatherApiClient;
+import com.gmail.arthurstrokov.weather.service.OpenWeatherApiService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.ResponseEntity;         
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,13 +21,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class OpenWeatherApiController {
 
-    private final OpenWeatherApiClient openWeatherApiClient;
+    private final OpenWeatherApiService openWeatherApiService;
     private final OpenApiProperties openApiProperties;
 
     @GetMapping("/forecast")
     public ResponseEntity<String> getWeatherForecast() {
         try {
-            String forecast = openWeatherApiClient.getWeatherForecastByCity(
+            String forecast = openWeatherApiService.getWeatherForecastByCity(
                     openApiProperties.getCityName(),
                     openApiProperties.getMode(),
                     openApiProperties.getUnits(),
@@ -46,7 +46,7 @@ public class OpenWeatherApiController {
     @GetMapping("/current")
     public ResponseEntity<String> getCurrentWeather() {
         try {
-            String currentWeather = openWeatherApiClient.getCurrentWeatherByCity(
+            String currentWeather = openWeatherApiService.getCurrentWeatherByCity(
                     openApiProperties.getCityName(),
                     openApiProperties.getMode(),
                     openApiProperties.getUnits(),

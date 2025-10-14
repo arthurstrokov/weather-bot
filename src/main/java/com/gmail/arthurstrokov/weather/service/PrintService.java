@@ -46,7 +46,7 @@ public class PrintService {
         Gson gson = new GsonBuilder().create();
         WeatherForecastDto weatherForecastDto =
                 gson.fromJson(weatherForecast, WeatherForecastDto.class);
-        return PrintService.formatMessage(weatherForecastDto);
+        return this.formatMessage(weatherForecastDto);
     }
 
     public String printWeatherForecast(String latitude, String longitude) {
@@ -62,7 +62,7 @@ public class PrintService {
         Gson gson = new GsonBuilder().create();
         WeatherForecastDto weatherForecastDto =
                 gson.fromJson(weatherForecastByGeographicCoordinates, WeatherForecastDto.class);
-        return PrintService.formatMessage(weatherForecastDto);
+        return this.formatMessage(weatherForecastDto);
     }
 
     public String printWeatherForecast(String city) {
@@ -77,10 +77,10 @@ public class PrintService {
         Gson gson = new GsonBuilder().create();
         WeatherForecastDto weatherForecastDto =
                 gson.fromJson(weatherForecastByCity, WeatherForecastDto.class);
-        return PrintService.formatMessage(weatherForecastDto);
+        return this.formatMessage(weatherForecastDto);
     }
 
-    private static String formatMessage(WeatherForecastDto weatherForecastDto) {
+    private String formatMessage(WeatherForecastDto weatherForecastDto) {
         ArrayList<List> list = weatherForecastDto.getList();
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("\n").append("city: ").append(weatherForecastDto.getCity().getName()).append("\n");

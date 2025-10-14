@@ -1,6 +1,5 @@
 package com.gmail.arthurstrokov.weather.service;
 
-import com.gmail.arthurstrokov.weather.configuration.OpenApiProperties;
 import com.gmail.arthurstrokov.weather.gateway.OpenWeatherApiClient;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -9,7 +8,6 @@ import com.google.gson.JsonParser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 /**
  * @author Arthur Strokov
@@ -21,8 +19,6 @@ import org.springframework.web.client.RestTemplate;
 @RequiredArgsConstructor
 public class OpenWeatherApiService {
 
-    private final RestTemplate restTemplate;
-    private final OpenApiProperties openApiProperties;
     private final OpenWeatherApiClient openWeatherApiClient;
 
     public String getCurrentWeatherByCity(String cityName, String mode, String units, String lang, String appid) {

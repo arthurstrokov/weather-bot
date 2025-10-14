@@ -27,8 +27,8 @@ public interface OpenWeatherApiClient {
             @RequestParam("lon") String lon,
             @RequestParam("mode") String mode,
             @RequestParam("units") String units,
-            @RequestParam("lang") String appid,
-            @RequestParam("appid") String lang
+            @RequestParam("lang") String lang,
+            @RequestParam("appid") String appid
     );
 
     @GetMapping("/forecast")
@@ -47,8 +47,8 @@ public interface OpenWeatherApiClient {
             @RequestParam("lon") String lon,
             @RequestParam("mode") String mode,
             @RequestParam("units") String units,
-            @RequestParam("lang") String appid,
+            @RequestParam("lang") String lang,
             @RequestParam("cnt") String cnt,
-            @RequestParam("appid") String lang
+            @RequestParam("appid") String appid
     );
 }

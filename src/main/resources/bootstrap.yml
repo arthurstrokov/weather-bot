@@ -2,13 +2,4 @@ spring:
   application:
     name: weather-bot
   profiles:
-    active: dev
-#  config:
-#    import: 'optional:configserver:'
-#  cloud:
-#    config:
-#      discovery:
-#        enabled: false
-#        service-id: cloud-configuration-server
-#      enabled: false
-#      failFast: false
+    active: local

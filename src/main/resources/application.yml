@@ -1,0 +1,34 @@
+bot:
+  name: ${BOT-NAME:WeatherForTomorrowBot}
+  token: ${BOT-TOKEN:5713484179:AAFUDViE6be0ZtKgvNYhUVMr_qXHO5oFXkY}
+  chatId: ${BOT-CHAT-ID:571618656L}
+
+open:
+  api:
+    key: ${OPEN-API-KEY:d708684d8dec8d887c34b7460962a3e1}
+    url:
+      base-url: ${OPEN-API-BASE-URL:https://api.openweathermap.org/data/2.5}
+    parameters:
+      current: /weather
+      forecast: /forecast
+      city: Minsk
+      mode: json
+      units: metric
+      lang: en
+      cnt: 4
+
+logging:
+  level:
+    org:
+      springframework:
+        web: INFO
+        boot: INFO
+      hibernate: ERROR
+    com.gmail.arthurstrokov.weather: DEBUG
+
+# Actuator
+management:
+  endpoints:
+    web:
+      exposure:
+        include: [ "*" ]

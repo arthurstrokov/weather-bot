@@ -5,7 +5,8 @@ import com.gmail.arthurstrokov.weather.service.OpenWeatherApiService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;         
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,7 +25,7 @@ public class OpenWeatherApiController {
     private final OpenWeatherApiService openWeatherApiService;
     private final OpenApiProperties openApiProperties;
 
-    @GetMapping("/forecast")
+    @GetMapping(value = "/forecast", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> getWeatherForecast() {
         try {
             String forecast = openWeatherApiService.getWeatherForecastByCity(
@@ -43,7 +44,7 @@ public class OpenWeatherApiController {
         }
     }
 
-    @GetMapping("/current")
+    @GetMapping(value = "/current", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> getCurrentWeather() {
         try {
             String currentWeather = openWeatherApiService.getCurrentWeatherByCity(

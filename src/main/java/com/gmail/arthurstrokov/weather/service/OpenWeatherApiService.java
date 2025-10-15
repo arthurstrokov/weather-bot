@@ -22,26 +22,20 @@ public class OpenWeatherApiService {
     private final OpenWeatherApiClient openWeatherApiClient;
 
     public String getCurrentWeatherByCity(String cityName, String mode, String units, String lang, String appid) {
-        String currentWeatherByCity = openWeatherApiClient.getCurrentWeatherByCity(cityName, mode, units, lang, appid);
-        return prettyPrintingJsonString(currentWeatherByCity);
+        return openWeatherApiClient.getCurrentWeatherByCity(cityName, mode, units, lang, appid);
     }
 
     public String getCurrentWeatherByGeographicCoordinates(String lat, String lon, String mode, String units, String lang, String appid) {
-        String currentWeatherByGeographicCoordinates =
-                openWeatherApiClient.getCurrentWeatherByGeographicCoordinates(lat, lon, mode, units, lang, appid);
-        return prettyPrintingJsonString(currentWeatherByGeographicCoordinates);
+        return openWeatherApiClient.getCurrentWeatherByGeographicCoordinates(lat, lon, mode, units, lang, appid);
     }
 
     public String getWeatherForecastByCity(String cityName, String mode, String units, String lang, String cnt, String appid) {
-        String weatherForecastByCity = openWeatherApiClient.getWeatherForecastByCity(cityName, mode, units, lang, cnt, appid);
-        return prettyPrintingJsonString(weatherForecastByCity);
+        return openWeatherApiClient.getWeatherForecastByCity(cityName, mode, units, lang, cnt, appid);
     }
 
     public String getWeatherForecastByGeographicCoordinates(String lat, String lon, String mode, String units, String lang, String cnt,
                                                             String appid) {
-        String weatherForecastByGeographicCoordinates =
-                openWeatherApiClient.getWeatherForecastByGeographicCoordinates(lat, lon, mode, units, lang, cnt, appid);
-        return prettyPrintingJsonString(weatherForecastByGeographicCoordinates);
+        return openWeatherApiClient.getWeatherForecastByGeographicCoordinates(lat, lon, mode, units, lang, cnt, appid);
     }
 
     private static String prettyPrintingJsonString(String s) {

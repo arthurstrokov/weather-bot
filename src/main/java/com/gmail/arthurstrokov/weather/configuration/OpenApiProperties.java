@@ -33,12 +33,4 @@ public class OpenApiProperties {
     private String lang;
     @Value("${open.api.parameters.cnt}")
     private String cnt;
-
-    public static final String CITY_NAME = "q";
-    public static final String RESPONSE_FORMAT = "mode";
-    public static final String UNITS_OF_MEASUREMENT = "units";
-    public static final String NUMBER_OF_TIMESTAMPS = "cnt";
-    public static final String APPID = "appid";
-    public static final String LAT = "lat";
-    public static final String LON = "lon";
 }

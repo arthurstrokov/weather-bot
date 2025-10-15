@@ -3,11 +3,9 @@ package com.gmail.arthurstrokov.weather.util;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.util.ResourceUtils;
-import wiremock.org.apache.commons.io.FileUtils;
+import org.springframework.util.StreamUtils;
 
-import java.io.File;
-import java.nio.file.Files;
+import java.io.InputStream;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
@@ -16,13 +14,15 @@ public class CommonUtils {
 
     @SneakyThrows
     public static String getJson(String pathname) {
-        File file = new ClassPathResource(pathname).getFile();
-        return FileUtils.readFileToString(file, UTF_8.name());
+        try (InputStream inputStream = new ClassPathResource(pathname).getInputStream()) {
+            return StreamUtils.copyToString(inputStream, UTF_8);
+        }
     }
 
     @SneakyThrows
     public static String readFileAsString(String path) {
-        File file = ResourceUtils.getFile(ResourceUtils.CLASSPATH_URL_PREFIX + "__files" + path);
-        return Files.readString(file.toPath());
+        try (InputStream inputStream = new ClassPathResource("__files" + path).getInputStream()) {
+            return StreamUtils.copyToString(inputStream, UTF_8);
+        }
     }
 }

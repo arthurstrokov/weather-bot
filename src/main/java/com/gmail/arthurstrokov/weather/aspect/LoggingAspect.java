@@ -23,7 +23,7 @@ import java.util.Arrays;
 @Component
 public class LoggingAspect {
 
-    @Pointcut("within(com.gmail.arthurstrokov.weather..*)")
+    @Pointcut("within(com.gmail.arthurstrokov.weather.controller..*) || within(com.gmail.arthurstrokov.weather.service..*)")
     public void applicationPointcut() {
         // Method is empty as this is just a Pointcut, the implementations are in the advices.
     }
@@ -81,9 +81,11 @@ public class LoggingAspect {
     public Object logExecutionTime(ProceedingJoinPoint joinPoint) {
         final StopWatch stopWatch = new StopWatch();
         stopWatch.start();
-        Object proceed = joinPoint.proceed();
-        stopWatch.stop();
-        log.info("{} executed in {} ms", joinPoint.getSignature(), stopWatch.getTotalTimeMillis());
-        return proceed;
+        try {
+            return joinPoint.proceed();
+        } finally {
+            stopWatch.stop();
+            log.info("{} executed in {} ms", joinPoint.getSignature(), stopWatch.getTotalTimeMillis());
+        }
     }
 }

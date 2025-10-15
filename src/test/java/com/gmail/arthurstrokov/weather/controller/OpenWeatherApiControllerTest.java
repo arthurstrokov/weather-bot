@@ -16,7 +16,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
+@SpringBootTest(properties = {
+        "open.api.url.base-url=http://localhost:${wiremock.server.port}",
+        "open.api.key=test-api-key"
+})
 @AutoConfigureMockMvc
 @WireMockTest
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
@@ -31,7 +34,7 @@ class OpenWeatherApiControllerTest {
     @SneakyThrows
     void getWeatherForecastTest() {
         //given
-        stubForGetREST("/forecast?q=Minsk&mode=json&units=metric&lang=en&cnt=4&appid=d708684d8dec8d887c34b7460962a3e1",
+        stubForGetREST("/forecast?q=Minsk&mode=json&units=metric&lang=en&cnt=4&appid=test-api-key",
                 "/forecast/expected.json");
         var expectedJsonResponse = "controller/expected.json";
         // when and then

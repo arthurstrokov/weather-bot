@@ -33,7 +33,7 @@ public class OpenWeatherApiController {
                     openApiProperties.getMode(),
                     openApiProperties.getUnits(),
                     openApiProperties.getLang(),
-                    "5", // cnt
+                    openApiProperties.getCnt(),
                     openApiProperties.getOpenApiKey()
             );
             return ResponseEntity.ok(forecast);

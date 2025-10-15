@@ -4,7 +4,7 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Arthur Strokov
@@ -17,6 +17,6 @@ public class WeatherForecastDto {
     String cod;
     int message;
     int cnt;
-    ArrayList<List> list;
+    List<ForecastEntry> list;
     City city;
 }

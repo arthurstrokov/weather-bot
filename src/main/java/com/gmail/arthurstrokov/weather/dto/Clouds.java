@@ -12,5 +12,5 @@ import lombok.experimental.FieldDefaults;
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Clouds {
-    public int all;
+    Integer all;
 }

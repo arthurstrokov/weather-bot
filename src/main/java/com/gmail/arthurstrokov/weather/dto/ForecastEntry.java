@@ -1,10 +1,12 @@
 package com.gmail.arthurstrokov.weather.dto;
 
+import com.google.gson.annotations.SerializedName;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Arthur Strokov
@@ -13,15 +15,16 @@ import java.util.ArrayList;
  */
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class List {
-    int dt;
+public class ForecastEntry {
+    long dt;
     Main main;
-    ArrayList<Weather> weather;
+    List<Weather> weather = new ArrayList<>();
     Clouds clouds;
     Wind wind;
-    int visibility;
-    double pop;
+    Integer visibility;
+    Double pop;
     Sys sys;
-    String dt_txt;
+    @SerializedName("dt_txt")
+    String dateText;
     Rain rain;
 }

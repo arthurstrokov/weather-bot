@@ -1,6 +1,6 @@
 package com.gmail.arthurstrokov.weather.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.annotations.SerializedName;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
@@ -13,6 +13,6 @@ import lombok.experimental.FieldDefaults;
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Rain {
-    @JsonProperty("3h")
-    double _3h;
+    @SerializedName("3h")
+    Double threeHourVolume;
 }

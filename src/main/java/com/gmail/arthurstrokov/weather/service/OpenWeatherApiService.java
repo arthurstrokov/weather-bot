@@ -1,10 +1,6 @@
 package com.gmail.arthurstrokov.weather.service;
 
 import com.gmail.arthurstrokov.weather.gateway.OpenWeatherApiClient;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -36,11 +32,5 @@ public class OpenWeatherApiService {
     public String getWeatherForecastByGeographicCoordinates(String lat, String lon, String mode, String units, String lang, String cnt,
                                                             String appid) {
         return openWeatherApiClient.getWeatherForecastByGeographicCoordinates(lat, lon, mode, units, lang, cnt, appid);
-    }
-
-    private static String prettyPrintingJsonString(String s) {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        JsonElement je = JsonParser.parseString(s);
-        return gson.toJson(je);
     }
 }

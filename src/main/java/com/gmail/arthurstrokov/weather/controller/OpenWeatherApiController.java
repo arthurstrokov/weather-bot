@@ -21,12 +21,12 @@ public class OpenWeatherApiController {
 
     private final OpenWeatherApiService openWeatherApiService;
 
-    @GetMapping(value = "/forecast", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "forecast", produces = MediaType.APPLICATION_JSON_VALUE)
     public String getWeatherForecast() {
         return openWeatherApiService.getWeatherForecast();
     }
 
-    @GetMapping(value = "/current", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "current", produces = MediaType.APPLICATION_JSON_VALUE)
     public String getCurrentWeather() {
         return openWeatherApiService.getCurrentWeather();
     }

@@ -1,6 +1,5 @@
 package com.gmail.arthurstrokov.weather.service;
 
-import com.gmail.arthurstrokov.weather.configuration.OpenApiProperties;
 import com.gmail.arthurstrokov.weather.dto.City;
 import com.gmail.arthurstrokov.weather.dto.ForecastEntry;
 import com.gmail.arthurstrokov.weather.dto.Rain;
@@ -30,50 +29,25 @@ public class PrintService {
 
     private static final String LINE_SEPARATOR = System.lineSeparator();
 
-    private final OpenApiProperties openApiProperties;
     private final OpenWeatherApiService openWeatherApiService;
     private final Gson gson = new GsonBuilder().create();
 
     public String printCurrentWeather() {
-        return openWeatherApiService.getCurrentWeatherByCity(
-                openApiProperties.getCityName(),
-                openApiProperties.getMode(),
-                openApiProperties.getUnits(),
-                openApiProperties.getLang(),
-                openApiProperties.getOpenApiKey());
+        return openWeatherApiService.getCurrentWeather();
     }
 
     public String printWeatherForecast() {
-        var response = openWeatherApiService.getWeatherForecastByCity(
-                openApiProperties.getCityName(),
-                openApiProperties.getMode(),
-                openApiProperties.getUnits(),
-                openApiProperties.getLang(),
-                openApiProperties.getCnt(),
-                openApiProperties.getOpenApiKey());
+        var response = openWeatherApiService.getWeatherForecast();
         return formatResponse(response);
     }
 
     public String printWeatherForecast(double latitude, double longitude) {
-        var response = openWeatherApiService.getWeatherForecastByGeographicCoordinates(
-                Double.toString(latitude),
-                Double.toString(longitude),
-                openApiProperties.getMode(),
-                openApiProperties.getUnits(),
-                openApiProperties.getLang(),
-                openApiProperties.getCnt(),
-                openApiProperties.getOpenApiKey());
+        var response = openWeatherApiService.getWeatherForecastByGeographicCoordinates(latitude, longitude);
         return formatResponse(response);
     }
 
     public String printWeatherForecast(String city) {
-        var response = openWeatherApiService.getWeatherForecastByCity(
-                city,
-                openApiProperties.getMode(),
-                openApiProperties.getUnits(),
-                openApiProperties.getLang(),
-                openApiProperties.getCnt(),
-                openApiProperties.getOpenApiKey());
+        var response = openWeatherApiService.getWeatherForecastByCity(city);
         return formatResponse(response);
     }
 

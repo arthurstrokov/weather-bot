@@ -1,6 +1,5 @@
 package com.gmail.arthurstrokov.weather.controller;
 
-import com.gmail.arthurstrokov.weather.configuration.OpenApiProperties;
 import com.gmail.arthurstrokov.weather.service.OpenWeatherApiService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,19 +22,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class OpenWeatherApiController {
 
     private final OpenWeatherApiService openWeatherApiService;
-    private final OpenApiProperties openApiProperties;
 
     @GetMapping(value = "/forecast", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> getWeatherForecast() {
         try {
-            String forecast = openWeatherApiService.getWeatherForecastByCity(
-                    openApiProperties.getCityName(),
-                    openApiProperties.getMode(),
-                    openApiProperties.getUnits(),
-                    openApiProperties.getLang(),
-                    openApiProperties.getCnt(),
-                    openApiProperties.getOpenApiKey()
-            );
+            String forecast = openWeatherApiService.getWeatherForecast();
             return ResponseEntity.ok(forecast);
         } catch (Exception e) {
             log.error("Error getting weather forecast", e);
@@ -47,13 +38,7 @@ public class OpenWeatherApiController {
     @GetMapping(value = "/current", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> getCurrentWeather() {
         try {
-            String currentWeather = openWeatherApiService.getCurrentWeatherByCity(
-                    openApiProperties.getCityName(),
-                    openApiProperties.getMode(),
-                    openApiProperties.getUnits(),
-                    openApiProperties.getLang(),
-                    openApiProperties.getOpenApiKey()
-            );
+            String currentWeather = openWeatherApiService.getCurrentWeather();
             return ResponseEntity.ok(currentWeather);
         } catch (Exception e) {
             log.error("Error getting current weather", e);

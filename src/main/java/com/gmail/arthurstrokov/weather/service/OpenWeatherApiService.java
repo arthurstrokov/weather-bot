@@ -1,5 +1,6 @@
 package com.gmail.arthurstrokov.weather.service;
 
+import com.gmail.arthurstrokov.weather.configuration.OpenApiProperties;
 import com.gmail.arthurstrokov.weather.gateway.OpenWeatherApiClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,21 +17,57 @@ import org.springframework.stereotype.Service;
 public class OpenWeatherApiService {
 
     private final OpenWeatherApiClient openWeatherApiClient;
+    private final OpenApiProperties openApiProperties;
 
-    public String getCurrentWeatherByCity(String cityName, String mode, String units, String lang, String appid) {
-        return openWeatherApiClient.getCurrentWeatherByCity(cityName, mode, units, lang, appid);
+    public String getCurrentWeather() {
+        return getCurrentWeatherByCity(openApiProperties.getCityName());
     }
 
-    public String getCurrentWeatherByGeographicCoordinates(String lat, String lon, String mode, String units, String lang, String appid) {
-        return openWeatherApiClient.getCurrentWeatherByGeographicCoordinates(lat, lon, mode, units, lang, appid);
+    public String getCurrentWeatherByCity(String cityName) {
+        return openWeatherApiClient.getCurrentWeatherByCity(
+                cityName,
+                openApiProperties.getMode(),
+                openApiProperties.getUnits(),
+                openApiProperties.getLang(),
+                openApiProperties.getOpenApiKey()
+        );
     }
 
-    public String getWeatherForecastByCity(String cityName, String mode, String units, String lang, String cnt, String appid) {
-        return openWeatherApiClient.getWeatherForecastByCity(cityName, mode, units, lang, cnt, appid);
+    public String getCurrentWeatherByGeographicCoordinates(double latitude, double longitude) {
+        return openWeatherApiClient.getCurrentWeatherByGeographicCoordinates(
+                Double.toString(latitude),
+                Double.toString(longitude),
+                openApiProperties.getMode(),
+                openApiProperties.getUnits(),
+                openApiProperties.getLang(),
+                openApiProperties.getOpenApiKey()
+        );
     }
 
-    public String getWeatherForecastByGeographicCoordinates(String lat, String lon, String mode, String units, String lang, String cnt,
-                                                            String appid) {
-        return openWeatherApiClient.getWeatherForecastByGeographicCoordinates(lat, lon, mode, units, lang, cnt, appid);
+    public String getWeatherForecast() {
+        return getWeatherForecastByCity(openApiProperties.getCityName());
+    }
+
+    public String getWeatherForecastByCity(String cityName) {
+        return openWeatherApiClient.getWeatherForecastByCity(
+                cityName,
+                openApiProperties.getMode(),
+                openApiProperties.getUnits(),
+                openApiProperties.getLang(),
+                openApiProperties.getCnt(),
+                openApiProperties.getOpenApiKey()
+        );
+    }
+
+    public String getWeatherForecastByGeographicCoordinates(double latitude, double longitude) {
+        return openWeatherApiClient.getWeatherForecastByGeographicCoordinates(
+                Double.toString(latitude),
+                Double.toString(longitude),
+                openApiProperties.getMode(),
+                openApiProperties.getUnits(),
+                openApiProperties.getLang(),
+                openApiProperties.getCnt(),
+                openApiProperties.getOpenApiKey()
+        );
     }
 }

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Slf4j
 @RestController
-@RequestMapping("/api/weather")
+@RequestMapping("api/weather")
 @RequiredArgsConstructor
 public class OpenWeatherApiController {
 

@@ -1,6 +1,6 @@
 package com.gmail.arthurstrokov.weather.service;
 
-import com.gmail.arthurstrokov.weather.configuration.OpenApiProperties;
+import com.gmail.arthurstrokov.weather.configuration.OpenWeatherProperties;
 import com.gmail.arthurstrokov.weather.gateway.OpenWeatherApiClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,19 +17,19 @@ import org.springframework.stereotype.Service;
 public class OpenWeatherApiService {
 
     private final OpenWeatherApiClient openWeatherApiClient;
-    private final OpenApiProperties openApiProperties;
+    private final OpenWeatherProperties openWeatherProperties;
 
     public String getCurrentWeather() {
-        return getCurrentWeatherByCity(openApiProperties.getCityName());
+        return getCurrentWeatherByCity(openWeatherProperties.getCityName());
     }
 
     public String getCurrentWeatherByCity(String cityName) {
         return openWeatherApiClient.getCurrentWeatherByCity(
                 cityName,
-                openApiProperties.getMode(),
-                openApiProperties.getUnits(),
-                openApiProperties.getLang(),
-                openApiProperties.getOpenApiKey()
+                openWeatherProperties.getMode(),
+                openWeatherProperties.getUnits(),
+                openWeatherProperties.getLang(),
+                openWeatherProperties.getOpenApiKey()
         );
     }
 
@@ -37,25 +37,25 @@ public class OpenWeatherApiService {
         return openWeatherApiClient.getCurrentWeatherByGeographicCoordinates(
                 Double.toString(latitude),
                 Double.toString(longitude),
-                openApiProperties.getMode(),
-                openApiProperties.getUnits(),
-                openApiProperties.getLang(),
-                openApiProperties.getOpenApiKey()
+                openWeatherProperties.getMode(),
+                openWeatherProperties.getUnits(),
+                openWeatherProperties.getLang(),
+                openWeatherProperties.getOpenApiKey()
         );
     }
 
     public String getWeatherForecast() {
-        return getWeatherForecastByCity(openApiProperties.getCityName());
+        return getWeatherForecastByCity(openWeatherProperties.getCityName());
     }
 
     public String getWeatherForecastByCity(String cityName) {
         return openWeatherApiClient.getWeatherForecastByCity(
                 cityName,
-                openApiProperties.getMode(),
-                openApiProperties.getUnits(),
-                openApiProperties.getLang(),
-                openApiProperties.getCnt(),
-                openApiProperties.getOpenApiKey()
+                openWeatherProperties.getMode(),
+                openWeatherProperties.getUnits(),
+                openWeatherProperties.getLang(),
+                openWeatherProperties.getCnt(),
+                openWeatherProperties.getOpenApiKey()
         );
     }
 
@@ -63,11 +63,11 @@ public class OpenWeatherApiService {
         return openWeatherApiClient.getWeatherForecastByGeographicCoordinates(
                 Double.toString(latitude),
                 Double.toString(longitude),
-                openApiProperties.getMode(),
-                openApiProperties.getUnits(),
-                openApiProperties.getLang(),
-                openApiProperties.getCnt(),
-                openApiProperties.getOpenApiKey()
+                openWeatherProperties.getMode(),
+                openWeatherProperties.getUnits(),
+                openWeatherProperties.getLang(),
+                openWeatherProperties.getCnt(),
+                openWeatherProperties.getOpenApiKey()
         );
     }
 }

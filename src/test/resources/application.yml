@@ -1,0 +1,13 @@
+open:
+  weather:
+    key: key
+    url:
+      base-url: http://localhost:${wiremock.server.port}
+    parameters:
+      current: /weather
+      forecast: /forecast
+      city: Minsk
+      mode: json
+      units: metric
+      lang: en
+      cnt: 4

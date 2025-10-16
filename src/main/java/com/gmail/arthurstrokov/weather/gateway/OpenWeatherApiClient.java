@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @email astrokov@clevertec.ru
  * @created 27.09.2022
  */
-@FeignClient(name = "api-client", url = "${open.api.url.base-url}")
+@FeignClient(name = "OpenWeatherApiClient", url = "${open.weather.url.base-url}")
 public interface OpenWeatherApiClient {
 
     @GetMapping("/weather")

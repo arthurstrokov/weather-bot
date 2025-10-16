@@ -3,12 +3,12 @@ server:
 
 bot:
   name: ${BOT_NAME:WeatherForTomorrowBot}
-  token: ${BOT_TOKEN:}
-  chatId: ${BOT_CHAT_ID:}
+  token: ${BOT_TOKEN:5713484179:AAFUDViE6be0ZtKgvNYhUVMr_qXHO5oFXkY}
+  chatId: ${BOT_CHAT_ID:571618656L}
 
 open:
   api:
-    key: ${OPEN_API_KEY:}
+    key: ${OPEN_API_KEY:d708684d8dec8d887c34b7460962a3e1}
     url:
       base-url: ${OPEN_API_BASE_URL:https://api.openweathermap.org/data/2.5}
     parameters:

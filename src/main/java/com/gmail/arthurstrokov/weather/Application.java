@@ -1,10 +1,8 @@
 package com.gmail.arthurstrokov.weather;
 
-import com.gmail.arthurstrokov.weather.configuration.BotProperties;
-import com.gmail.arthurstrokov.weather.configuration.OpenWeatherProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
 /**
@@ -14,7 +12,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
  */
 @EnableFeignClients
 @SpringBootApplication
-@EnableConfigurationProperties({BotProperties.class, OpenWeatherProperties.class})
+@ConfigurationPropertiesScan
 public class Application {
 
     public static void main(String[] args) {

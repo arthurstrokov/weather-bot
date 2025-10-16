@@ -1,20 +1,17 @@
 package com.gmail.arthurstrokov.weather.configuration;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.cloud.context.config.annotation.RefreshScope;
 
 /**
  * @author Arthur Strokov
  * @email arthurstrokov@gmail.com
  * @created 24.09.2022
  */
-@RefreshScope
-@ConfigurationProperties(prefix = "open.api")
+@ConfigurationProperties(prefix = "open.weather")
 public record OpenWeatherProperties(
         String key,
         Url url,
-        Parameters parameters
-) {
+        Parameters parameters) {
 
     public OpenWeatherProperties {
         url = url == null ? new Url(null) : url;
@@ -72,7 +69,6 @@ public record OpenWeatherProperties(
             String mode,
             String units,
             String lang,
-            String cnt
-    ) {
+            String cnt) {
     }
 }

@@ -34,4 +34,15 @@ management:
   endpoints:
     web:
       exposure:
-        include: [ "*" ]
+        include: [ "*", "prometheus" ]
+  endpoint:
+    prometheus:
+      enabled: true
+  metrics:
+    tags:
+      application: weather-bot
+    export: { }
+  prometheus:
+    metrics:
+      export:
+        enabled: true

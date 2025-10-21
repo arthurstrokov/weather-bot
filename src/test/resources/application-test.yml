@@ -2,6 +2,11 @@ chat:
   implementation: ${IMPL:local}
 ollama:
   base-url: https://ollama.com
+# Telegram API
+bot:
+  name: WeatherForTomorrowBot
+  token: token
+  chatId: chatId
 open:
   weather:
     key: key

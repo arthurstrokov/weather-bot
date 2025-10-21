@@ -12,9 +12,11 @@ public class LocalChatService implements ChatService {
 
     private final ChatModel chatModel;
     private final PromptService promptService;
+    private final OpenWeatherService openWeatherService;
 
-    public String chat(String query, String context) {
-        String prompt = promptService.generatePrompt(query, context);
+    public String getWeatherForecastWithChat(String city) {
+        String weatherForecastByCity = openWeatherService.getWeatherForecastByCity(city);
+        String prompt = promptService.generatePrompt(city, weatherForecastByCity);
         return chatModel.call(prompt);
     }
 }

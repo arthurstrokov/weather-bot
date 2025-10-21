@@ -24,32 +24,32 @@ A Spring Boot 3 application that exposes REST endpoints and a Telegram long-poll
 
 ## Features
 - REST endpoints for current conditions and forecast
-  - GET /api/weather/current
-  - GET /api/weather/forecast
+  - GET /api/weather/current?city={City}
+  - GET /api/weather/forecast?city={City}
 - Telegram bot commands:
-  - /current — current weather for a configured city
-  - /forecast — short-term forecast for a configured city
-  - /test — same as /current (alias)
-  - Share location — send your location to get a forecast for coordinates
+  - /start — shows help and inline menu
+  - /current — current weather for the default city (Minsk by default)
+  - /forecast — short-term forecast for the default city (Minsk by default)
+  - /location — requests to share your location and returns forecast by coordinates
+  - Share location — tap the keyboard button “Share location” to send coordinates
 - Actuator endpoints (e.g., /actuator/health) and Prometheus metrics
 
 ## Configuration (Environment Variables)
 These map to values in src/main/resources/application.yml. Do not commit secrets.
 
+- PORT — HTTP port (default 8080)
 - BOT_NAME — Public Telegram bot name (defaults to WeatherForTomorrowBot)
 - BOT_TOKEN — Telegram bot token (required to enable bot)
 - BOT_CHAT_ID — Optional, chat id for diagnostics
 - OPEN_API_KEY — OpenWeather API key (required)
 - OPEN_API_BASE_URL — Base URL for OpenWeather API (default https://api.openweathermap.org/data/2.5)
-- PORT — HTTP port (default 8080)
+- IMPL — Chat implementation selector for the app (default: local). Values: `local`, `remote` (see ChatService implementations). 
 
 AI/Ollama settings (defaults are in application.yml):
-- OLLAMA base URL is configured at spring.ai.ollama.base-url: http://localhost:11434
+- spring.ai.ollama.base-url: http://localhost:11434
 - Chat model: gpt-oss:20b
 - Embedding model: nomic-embed-text
-
-TODO:
-- Externalize Ollama settings via environment variables if deployment requires it.
+- TODO: Externalize these Spring AI/Ollama settings via environment variables if deployment requires it.
 
 ## Setup
 1) Clone and configure environment variables (see above). At minimum, set OPEN_API_KEY and BOT_TOKEN to enable both REST and Telegram features.
@@ -79,7 +79,11 @@ docker run --rm -p 8080:8080 \
   weather-bot
 ```
 
-Once running locally, REST endpoints are available at http://localhost:8080.
+Once running locally:
+- REST endpoints are available at http://localhost:8080
+- Examples:
+  - http://localhost:8080/api/weather/current?city=Minsk
+  - http://localhost:8080/api/weather/forecast?city=London
 
 ## Scripts and Tasks
 Common Gradle tasks:
@@ -117,8 +121,12 @@ Common Gradle tasks:
 - Prometheus: metrics exposed and can be scraped when enabled
 
 ## API Notes
-- City defaults to Minsk (see open.weather.parameters.city in application.yml)
+- Default city for bot commands: Minsk (see open.weather.parameters.city in application.yml)
 - Units: metric; Language: en; Forecast count: 4 (see application.yml)
+
+## Entry Points
+- Application main class: com.gmail.arthurstrokov.weather.Application
+- Telegram bot service: com.gmail.arthurstrokov.weather.service.WeatherBotService
 
 ## License
 No license file detected in the repository.

@@ -16,10 +16,12 @@ public class RemoteChatService implements ChatService {
 
     private final OllamaClient ollamaClient;
     private final PromptService promptService;
+    private final OpenWeatherService openWeatherService;
 
-    public String chat(String query, String context) {
-        String prompt = promptService.generatePrompt(query, context);
-        ChatRequest request = new ChatRequest("gpt-oss:120b", List.of(new ChatMessage("user", prompt)), false);
+    public String getWeatherForecastWithChat(String city) {
+        String weatherForecastByCity = openWeatherService.getWeatherForecastByCity(city);
+        String prompt = promptService.generatePrompt(city, weatherForecastByCity);
+        ChatRequest request = new ChatRequest("gpt-oss:20b", List.of(new ChatMessage("user", prompt)), false);
         return ollamaClient.chat(request).message().content();
     }
 }

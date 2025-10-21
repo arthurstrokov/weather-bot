@@ -25,7 +25,7 @@ class OpenWeatherApiControllerTest {
     private final MockMvc mockMvc;
 
     /**
-     * Method under test: {@link OpenWeatherApiController#getWeatherForecast()}
+     * Method under test: {@link OpenWeatherApiController#getWeatherForecast(String)}
      */
     @Test
     @SneakyThrows
@@ -37,6 +37,7 @@ class OpenWeatherApiControllerTest {
         // when and then
         mockMvc.perform(get("/api/weather/forecast")
                         .contentType(APPLICATION_JSON_VALUE)
+                        .param("city", "Minsk")
                 )
                 .andExpectAll(
                         status().isOk(),

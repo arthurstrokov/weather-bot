@@ -10,9 +10,9 @@ import static com.gmail.arthurstrokov.weather.template.PromptTemplate.PROMPT_TEM
 @RequiredArgsConstructor
 public class PromptService {
 
-    public String generatePrompt(String query, String context) {
+    public String generatePrompt(String city, String context) {
         PromptTemplate promptTemplate = new PromptTemplate(PROMPT_TEMPLATE.getTemplate());
-        promptTemplate.add("query", query);
+        promptTemplate.add("city", city);
         promptTemplate.add("context", context);
         return promptTemplate.render();
     }

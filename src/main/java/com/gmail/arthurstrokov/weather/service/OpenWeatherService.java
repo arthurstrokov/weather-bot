@@ -11,11 +11,10 @@ public class OpenWeatherService {
 
     private final OpenWeatherApiClient openWeatherApiClient;
     private final OpenWeatherProperties openWeatherProperties;
-    private final ChatService chatService;
 
-    public String getCurrentWeatherByCity() {
+    public String getCurrentWeatherByCity(String city) {
         return openWeatherApiClient.getCurrentWeatherByCity(
-                openWeatherProperties.getCityName(),
+                city,
                 openWeatherProperties.getMode(),
                 openWeatherProperties.getUnits(),
                 openWeatherProperties.getLang(),
@@ -34,13 +33,9 @@ public class OpenWeatherService {
         );
     }
 
-    public String getWeatherForecastWithChat(String query) {
-        return chatService.chat(query, getWeatherForecastByCity());
-    }
-
-    public String getWeatherForecastByCity() {
+    public String getWeatherForecastByCity(String city) {
         return openWeatherApiClient.getWeatherForecastByCity(
-                openWeatherProperties.getCityName(),
+                city,
                 openWeatherProperties.getMode(),
                 openWeatherProperties.getUnits(),
                 openWeatherProperties.getLang(),

@@ -9,15 +9,18 @@ public enum PromptTemplate {
 
     PROMPT_TEMPLATE("""
             
-            {query}
+            {city}
             
             {context}
             
+            Write a short weather forecast for the city of {city} for {context}.
+            Include temperature, precipitation, and wind conditions.
+            Use a cheerful and friendly tone, as if it's for a social media post.
+            
             Follow these rules:
             
-            1. If the answer is not in the context, just say that you don't know.
-            2. Avoid statements like "Based on the context..." or "The provided information...".
-            3. Answer in Russian.
+            1. Avoid statements like "Based on the context..." or "The provided information...".
+            2. Answer in Russian.
             """);
 
     private final String template;

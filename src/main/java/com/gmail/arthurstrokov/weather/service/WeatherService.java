@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class OpenWeatherService {
+public class WeatherService {
 
     private final OpenWeatherApiClient openWeatherApiClient;
     private final OpenWeatherProperties openWeatherProperties;

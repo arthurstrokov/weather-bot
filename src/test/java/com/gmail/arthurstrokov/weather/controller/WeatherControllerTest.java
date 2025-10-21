@@ -26,12 +26,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @EnableWireMock
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 @ActiveProfiles("test")
-class OpenWeatherApiControllerTest {
+class WeatherControllerTest {
 
     private final MockMvc mockMvc;
 
     /**
-     * Method under test: {@link OpenWeatherApiController#getWeatherForecast(String)}
+     * Method under test: {@link WeatherController#getWeatherForecast(String)}
      */
     @Test
     @DisplayName("Should return weather forecast for a given city")

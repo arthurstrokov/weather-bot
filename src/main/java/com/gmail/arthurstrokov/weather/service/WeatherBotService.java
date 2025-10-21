@@ -48,15 +48,15 @@ public class WeatherBotService implements SpringLongPollingBot, LongPollingSingl
     private static final String DEFAULT_CITY = "Minsk";
 
     private final BotProperties botProperties;
-    private final OpenWeatherService openWeatherService;
+    private final WeatherService weatherService;
     private final ChatService chatService;
     private final TelegramClient telegramClient;
 
     public WeatherBotService(BotProperties botProperties,
-                             OpenWeatherService openWeatherService,
+                             WeatherService weatherService,
                              ChatService chatService) {
         this.botProperties = botProperties;
-        this.openWeatherService = openWeatherService;
+        this.weatherService = weatherService;
         this.chatService = chatService;
         this.telegramClient = new OkHttpTelegramClient(getBotToken());
     }
@@ -134,9 +134,9 @@ public class WeatherBotService implements SpringLongPollingBot, LongPollingSingl
                 sendMsgWithInlineMenu(chatId, greeting);
             }
             case COMMAND_FORECAST -> sendMsgWithInlineMenu(chatId,
-                    openWeatherService.getWeatherForecastByCity(DEFAULT_CITY));
+                    weatherService.getWeatherForecastByCity(DEFAULT_CITY));
             case COMMAND_CURRENT -> sendMsgWithInlineMenu(chatId,
-                    openWeatherService.getCurrentWeatherByCity(DEFAULT_CITY));
+                    weatherService.getCurrentWeatherByCity(DEFAULT_CITY));
             case COMMAND_LOCATION -> sendLocationRequestKeyboard(chatId, "Отправьте вашу геолокацию:");
             default -> {
                 String weatherDescription = chatService.getWeatherForecastWithChat(text);
@@ -148,7 +148,7 @@ public class WeatherBotService implements SpringLongPollingBot, LongPollingSingl
     private void handleLocation(long chatId, Message message) {
         double lat = message.getLocation().getLatitude();
         double lon = message.getLocation().getLongitude();
-        String reply = openWeatherService.getWeatherForecastByGeographicCoordinates(lat, lon);
+        String reply = weatherService.getWeatherForecastByGeographicCoordinates(lat, lon);
         sendMsgWithInlineMenu(chatId, reply);
     }
 
@@ -160,9 +160,9 @@ public class WeatherBotService implements SpringLongPollingBot, LongPollingSingl
 
         switch (data) {
             case COMMAND_FORECAST -> sendMsgWithInlineMenu(chatId,
-                    openWeatherService.getWeatherForecastByCity(DEFAULT_CITY));
+                    weatherService.getWeatherForecastByCity(DEFAULT_CITY));
             case COMMAND_CURRENT -> sendMsgWithInlineMenu(chatId,
-                    openWeatherService.getCurrentWeatherByCity(DEFAULT_CITY));
+                    weatherService.getCurrentWeatherByCity(DEFAULT_CITY));
             case COMMAND_LOCATION -> sendLocationRequestKeyboard(chatId,
                     "Нажмите кнопку ниже, чтобы поделиться локацией:");
             default -> sendMsgWithInlineMenu(chatId, "Неизвестная команда.");

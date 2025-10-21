@@ -68,7 +68,7 @@ Actuator/metrics
 
 ## Entry Points
 - Application main class: com.gmail.arthurstrokov.weather.Application
-- REST controller: com.gmail.arthurstrokov.weather.controller.OpenWeatherApiController
+- REST controller: com.gmail.arthurstrokov.weather.controller.WeatherController
 - Telegram bot service: com.gmail.arthurstrokov.weather.service.WeatherBotService
 - Chat implementations (select via IMPL env):
   - local → com.gmail.arthurstrokov.weather.service.LocalChatService (Spring AI ChatModel)

@@ -1,4 +1,10 @@
 spring:
+  cloud:
+    openfeign:
+      client:
+        config:
+          default:
+            loggerLevel: basic
   ai:
     ollama:
       base-url: http://localhost:11434
@@ -11,15 +17,14 @@ spring:
         options:
           temperature: 0.0
           model: nomic-embed-text
-
 server:
   port: ${PORT:8080}
-
+# Telegram API
 bot:
   name: ${BOT_NAME:WeatherForTomorrowBot}
   token: ${BOT_TOKEN}
   chatId: ${BOT_CHAT_ID}
-
+# https://openweathermap.org/
 open:
   weather:
     key: ${OPEN_API_KEY}
@@ -33,16 +38,6 @@ open:
       units: metric
       lang: en
       cnt: 4
-
-logging:
-  level:
-    org:
-      springframework:
-        web: INFO
-        boot: INFO
-      hibernate: ERROR
-    com.gmail.arthurstrokov.weather: DEBUG
-
 # Actuator
 management:
   endpoints:
@@ -60,3 +55,7 @@ management:
     metrics:
       export:
         enabled: true
+# Logging
+logging:
+  level:
+    root: info

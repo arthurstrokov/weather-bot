@@ -1,7 +1,8 @@
 plugins {
-    id 'org.springframework.boot' version '3.4.3'
-    id 'io.spring.dependency-management' version '1.1.6'
+    id 'org.springframework.boot' version '3.4.5'
+    id 'io.spring.dependency-management' version '1.1.7'
     id 'java'
+    id 'jacoco'
 }
 
 group = 'com.gmail.arthurstrokov'
@@ -25,34 +26,59 @@ repositories {
 
 ext {
     set('springCloudVersion', "2024.0.0")
+    set('springAiVersion', "1.0.0")
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-aop'
-    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+    // Spring Boot starters
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.wiremock.integrations:wiremock-spring-boot:3.10.6'
-    // Lombok dependency for compile-time generation
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+    // Spring Cloud
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+
+    // Monitoring / metrics
+    implementation 'io.micrometer:micrometer-registry-prometheus'
+
+    // External libraries
+    implementation 'org.telegram:telegrambots:6.1.0'
+    implementation 'com.google.code.gson:gson:2.12.0'
+
+    // Spring AI - Ollama
+    implementation 'org.springframework.ai:spring-ai-starter-model-ollama'
+
+    // Lombok (compile-time code generation)
     compileOnly 'org.projectlombok:lombok:1.18.30'
     annotationProcessor 'org.projectlombok:lombok:1.18.30'
-    // Optional: for testing
+
+    // Lombok for tests (optional)
     testCompileOnly 'org.projectlombok:lombok:1.18.30'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.30'
-    implementation 'com.google.code.gson:gson:2.12.0'
-    implementation 'org.telegram:telegrambots:6.1.0'
-    implementation 'org.springframework.boot:spring-boot-starter-actuator'
-    implementation 'io.micrometer:micrometer-registry-prometheus'
+
+    // Testing
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.wiremock.integrations:wiremock-spring-boot:3.10.6'
 }
 
 dependencyManagement {
     imports {
         mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+        mavenBom "org.springframework.ai:spring-ai-bom:${springAiVersion}"
     }
 }
 
 tasks.named('test') {
     useJUnitPlatform()
+    finalizedBy jacocoTestReport
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.required = true
+        html.required = true
+    }
 }
 
 tasks.named('bootJar') {

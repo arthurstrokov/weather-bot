@@ -1,5 +1,8 @@
 # Weather Bot
 
+https://github.com/rubenlagus/TelegramBots
+https://rubenlagus.github.io/TelegramBotsDocumentation/telegram-bots.html
+
 A Spring Boot 3 application that exposes REST endpoints and a Telegram long‑polling bot to deliver current weather data and short‑term forecasts using the OpenWeather API. The app also integrates Spring AI with a local Ollama model to enrich forecast descriptions and provides Prometheus metrics via Spring Boot Actuator.
 
 ## Stack

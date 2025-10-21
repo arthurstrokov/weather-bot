@@ -1,3 +1,7 @@
+chat:
+  implementation: ${IMPL:local}
+ollama:
+  base-url: https://ollama.com
 open:
   weather:
     key: key

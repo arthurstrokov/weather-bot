@@ -1,11 +1,34 @@
+chat:
+  implementation: ${IMPL:local}
+spring:
+  cloud:
+    openfeign:
+      client:
+        config:
+          default:
+            loggerLevel: basic
+  ai:
+    ollama:
+      base-url: http://localhost:11434
+      chat:
+        model: gpt-oss:20b # gpt-oss:20b # nomic-embed-text:latest({"error":"\"nomic-embed-text:latest\" does not support chat"})
+        options:
+          temperature: 0.6 # Controls randomness in text generation (0.0 = deterministic, 1.0 = maximum randomness)
+          top-p: 0.9 # Controls diversity via nucleus sampling (1.0 = consider all tokens, 0.1 = consider only top 10% probable tokens)
+      embedding:
+        options:
+          temperature: 0.0
+          model: nomic-embed-text
+ollama:
+  base-url: https://ollama.com
 server:
   port: ${PORT:8080}
-
+# Telegram API
 bot:
   name: ${BOT_NAME:WeatherForTomorrowBot}
   token: ${BOT_TOKEN}
   chatId: ${BOT_CHAT_ID}
-
+# https://openweathermap.org/
 open:
   weather:
     key: ${OPEN_API_KEY}
@@ -19,16 +42,6 @@ open:
       units: metric
       lang: en
       cnt: 4
-
-logging:
-  level:
-    org:
-      springframework:
-        web: INFO
-        boot: INFO
-      hibernate: ERROR
-    com.gmail.arthurstrokov.weather: DEBUG
-
 # Actuator
 management:
   endpoints:
@@ -46,3 +59,7 @@ management:
     metrics:
       export:
         enabled: true
+# Logging
+logging:
+  level:
+    root: info

@@ -3,29 +3,18 @@ package com.gmail.arthurstrokov.weather.service;
 import com.gmail.arthurstrokov.weather.configuration.OpenWeatherProperties;
 import com.gmail.arthurstrokov.weather.gateway.OpenWeatherApiClient;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-/**
- * @author Arthur Strokov
- * @email arthurstrokov@gmail.com
- * @created 24.09.2022
- */
-@Slf4j
 @Service
 @RequiredArgsConstructor
-public class OpenWeatherApiService {
+public class OpenWeatherService {
 
     private final OpenWeatherApiClient openWeatherApiClient;
     private final OpenWeatherProperties openWeatherProperties;
 
-    public String getCurrentWeather() {
-        return getCurrentWeatherByCity(openWeatherProperties.getCityName());
-    }
-
-    public String getCurrentWeatherByCity(String cityName) {
+    public String getCurrentWeatherByCity(String city) {
         return openWeatherApiClient.getCurrentWeatherByCity(
-                cityName,
+                city,
                 openWeatherProperties.getMode(),
                 openWeatherProperties.getUnits(),
                 openWeatherProperties.getLang(),
@@ -44,13 +33,9 @@ public class OpenWeatherApiService {
         );
     }
 
-    public String getWeatherForecast() {
-        return getWeatherForecastByCity(openWeatherProperties.getCityName());
-    }
-
-    public String getWeatherForecastByCity(String cityName) {
+    public String getWeatherForecastByCity(String city) {
         return openWeatherApiClient.getWeatherForecastByCity(
-                cityName,
+                city,
                 openWeatherProperties.getMode(),
                 openWeatherProperties.getUnits(),
                 openWeatherProperties.getLang(),

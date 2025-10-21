@@ -2,6 +2,6 @@ package com.gmail.arthurstrokov.weather.configuration;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-@ConfigurationProperties(prefix = "bot")
-public record BotProperties(String name, String token, String chatId) {
+@ConfigurationProperties(prefix = "chat")
+public record OllamaProperties(String implementation) {
 }

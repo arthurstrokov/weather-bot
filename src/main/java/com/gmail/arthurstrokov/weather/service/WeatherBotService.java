@@ -49,7 +49,7 @@ public class WeatherBotService extends TelegramLongPollingBot {
     public WeatherBotService(BotProperties botProperties,
                              OpenWeatherService openWeatherService,
                              ChatService chatService) {
-        super(botProperties.getToken());
+        super(botProperties.token());
         this.botProperties = botProperties;
         this.openWeatherService = openWeatherService;
         this.chatService = chatService;
@@ -233,6 +233,6 @@ public class WeatherBotService extends TelegramLongPollingBot {
 
     @Override
     public String getBotUsername() {
-        return botProperties.getName();
+        return botProperties.name();
     }
 }

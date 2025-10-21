@@ -2,11 +2,6 @@ package com.gmail.arthurstrokov.weather.configuration;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-/**
- * @author Arthur Strokov
- * @email arthurstrokov@gmail.com
- * @created 24.09.2022
- */
 @ConfigurationProperties(prefix = "open.weather")
 public record OpenWeatherProperties(
         String key,

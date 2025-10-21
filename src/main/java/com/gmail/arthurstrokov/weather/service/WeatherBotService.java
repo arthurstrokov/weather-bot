@@ -5,32 +5,37 @@ import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.client.okhttp.OkHttpTelegramClient;
+import org.telegram.telegrambots.longpolling.interfaces.LongPollingUpdateConsumer;
+import org.telegram.telegrambots.longpolling.starter.SpringLongPollingBot;
+import org.telegram.telegrambots.longpolling.util.LongPollingSingleThreadUpdateConsumer;
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
-import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
+import org.telegram.telegrambots.meta.api.objects.message.Message;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardRow;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
+import org.telegram.telegrambots.meta.generics.TelegramClient;
 
 import java.util.List;
 import java.util.Locale;
 
 @Slf4j
 @Service
-public class WeatherBotService extends TelegramLongPollingBot {
+public class WeatherBotService implements SpringLongPollingBot, LongPollingSingleThreadUpdateConsumer {
 
     private static final String COMMAND_START = "/start";
     private static final String COMMAND_FORECAST = "/forecast";
     private static final String COMMAND_CURRENT = "/current";
-    private static final String COMMAND_LOCATION = "/location"; // псевдо-команда
+    private static final String COMMAND_LOCATION = "/location";
 
     private static final String BUTTON_LOCATION_TEXT = "Share location";
     private static final String MENU_PROMPT = "Выберите действие:";
@@ -40,19 +45,20 @@ public class WeatherBotService extends TelegramLongPollingBot {
             /forecast — прогноз погоды
             /location — отправить геолокацию
             """;
-    private static final String CITY = "Minsk";
+    private static final String DEFAULT_CITY = "Minsk";
 
     private final BotProperties botProperties;
     private final OpenWeatherService openWeatherService;
     private final ChatService chatService;
+    private final TelegramClient telegramClient;
 
     public WeatherBotService(BotProperties botProperties,
                              OpenWeatherService openWeatherService,
                              ChatService chatService) {
-        super(botProperties.token());
         this.botProperties = botProperties;
         this.openWeatherService = openWeatherService;
         this.chatService = chatService;
+        this.telegramClient = new OkHttpTelegramClient(getBotToken());
     }
 
     @PostConstruct
@@ -63,19 +69,43 @@ public class WeatherBotService extends TelegramLongPollingBot {
                     new BotCommand(COMMAND_FORECAST, "Прогноз погоды"),
                     new BotCommand(COMMAND_LOCATION, "Поделиться локацией")
             );
-            execute(SetMyCommands.builder()
+            telegramClient.execute(SetMyCommands.builder()
                     .commands(commands)
                     .scope(new BotCommandScopeDefault())
                     .languageCode(null)
                     .build()
             );
         } catch (Exception e) {
-            log.error("Failed to set bot commands: {}", e.getMessage());
+            log.error("Failed to set bot commands", e);
         }
     }
 
+    // --- SpringLongPollingBot contract ---
+
     @Override
-    public void onUpdateReceived(Update update) {
+    public String getBotToken() {
+        return botProperties.token();
+    }
+
+    @Override
+    public LongPollingUpdateConsumer getUpdatesConsumer() {
+        return this; // single-thread consumer
+    }
+
+    // --- Single-thread consumer entrypoint ---
+
+    @Override
+    public void consume(Update update) {
+        try {
+            handleUpdate(update);
+        } catch (Exception e) {
+            log.error("Error while handling update", e);
+        }
+    }
+
+    // --- Update handling ---
+
+    private void handleUpdate(Update update) {
         if (update == null) return;
 
         if (update.hasCallbackQuery()) {
@@ -104,9 +134,9 @@ public class WeatherBotService extends TelegramLongPollingBot {
                 sendMsgWithInlineMenu(chatId, greeting);
             }
             case COMMAND_FORECAST -> sendMsgWithInlineMenu(chatId,
-                    openWeatherService.getWeatherForecastByCity(CITY));
+                    openWeatherService.getWeatherForecastByCity(DEFAULT_CITY));
             case COMMAND_CURRENT -> sendMsgWithInlineMenu(chatId,
-                    openWeatherService.getCurrentWeatherByCity(CITY));
+                    openWeatherService.getCurrentWeatherByCity(DEFAULT_CITY));
             case COMMAND_LOCATION -> sendLocationRequestKeyboard(chatId, "Отправьте вашу геолокацию:");
             default -> {
                 String weatherDescription = chatService.getWeatherForecastWithChat(text);
@@ -130,25 +160,25 @@ public class WeatherBotService extends TelegramLongPollingBot {
 
         switch (data) {
             case COMMAND_FORECAST -> sendMsgWithInlineMenu(chatId,
-                    openWeatherService.getWeatherForecastByCity(CITY));
+                    openWeatherService.getWeatherForecastByCity(DEFAULT_CITY));
             case COMMAND_CURRENT -> sendMsgWithInlineMenu(chatId,
-                    openWeatherService.getCurrentWeatherByCity(CITY));
+                    openWeatherService.getCurrentWeatherByCity(DEFAULT_CITY));
             case COMMAND_LOCATION -> sendLocationRequestKeyboard(chatId,
                     "Нажмите кнопку ниже, чтобы поделиться локацией:");
             default -> sendMsgWithInlineMenu(chatId, "Неизвестная команда.");
         }
     }
 
+    // --- Telegram API helpers ---
+
     private void safeAnswerCallback(String callbackId) {
         try {
-            AnswerCallbackQuery answer = AnswerCallbackQuery.builder()
+            telegramClient.execute(AnswerCallbackQuery.builder()
                     .callbackQueryId(callbackId)
-                    .text(null)
                     .showAlert(false)
-                    .build();
-            execute(answer);
+                    .build());
         } catch (Exception e) {
-            log.error("Error answering callback: {}", e.getMessage());
+            log.error("Error answering callback", e);
         }
     }
 
@@ -157,12 +187,12 @@ public class WeatherBotService extends TelegramLongPollingBot {
             SendMessage msg = SendMessage.builder()
                     .chatId(chatId)
                     .text(text)
+                    .replyMarkup(buildInlineMenu())
                     .build();
             msg.enableHtml(true);
-            msg.setReplyMarkup(buildInlineMenu());
-            execute(msg);
+            telegramClient.execute(msg);
         } catch (Exception e) {
-            log.error("Error sending message: {}", e.getMessage());
+            log.error("Error sending message", e);
         }
     }
 
@@ -170,29 +200,29 @@ public class WeatherBotService extends TelegramLongPollingBot {
         try {
             SendMessage msg = SendMessage.builder()
                     .chatId(chatId)
-                    .text(WeatherBotService.MENU_PROMPT)
+                    .text(MENU_PROMPT)
+                    .replyMarkup(buildInlineMenu())
                     .build();
             msg.enableHtml(true);
-            msg.setReplyMarkup(buildInlineMenu());
-            execute(msg);
+            telegramClient.execute(msg);
         } catch (Exception e) {
-            log.error("Error sending inline menu: {}", e.getMessage());
+            log.error("Error sending inline menu", e);
         }
     }
 
     private void sendLocationRequestKeyboard(long chatId, String prompt) {
         try {
-            ReplyKeyboardMarkup replyMarkup = new ReplyKeyboardMarkup();
-            replyMarkup.setSelective(true);
-            replyMarkup.setResizeKeyboard(true);
-            replyMarkup.setOneTimeKeyboard(true);
+            ReplyKeyboardMarkup replyMarkup = ReplyKeyboardMarkup.builder()
+                    .selective(true)
+                    .resizeKeyboard(true)
+                    .oneTimeKeyboard(true)
+                    .build();
 
             KeyboardButton locationButton = new KeyboardButton(BUTTON_LOCATION_TEXT);
             locationButton.setRequestLocation(true);
 
             KeyboardRow row = new KeyboardRow();
             row.add(locationButton);
-
             replyMarkup.setKeyboard(List.of(row));
 
             SendMessage msg = SendMessage.builder()
@@ -201,11 +231,13 @@ public class WeatherBotService extends TelegramLongPollingBot {
                     .replyMarkup(replyMarkup)
                     .build();
             msg.enableHtml(true);
-            execute(msg);
+            telegramClient.execute(msg);
         } catch (Exception e) {
-            log.error("Error sending location keyboard: {}", e.getMessage());
+            log.error("Error sending location keyboard", e);
         }
     }
+
+    // --- Inline keyboard builder (v7 API) ---
 
     private InlineKeyboardMarkup buildInlineMenu() {
         InlineKeyboardButton forecastBtn = InlineKeyboardButton.builder()
@@ -223,16 +255,15 @@ public class WeatherBotService extends TelegramLongPollingBot {
                 .callbackData(COMMAND_LOCATION)
                 .build();
 
-        List<List<InlineKeyboardButton>> rows = List.of(
-                List.of(forecastBtn, currentBtn),
-                List.of(locationBtn)
-        );
+        InlineKeyboardRow row1 = new InlineKeyboardRow();
+        row1.add(forecastBtn);
+        row1.add(currentBtn);
 
-        return new InlineKeyboardMarkup(rows);
-    }
+        InlineKeyboardRow row2 = new InlineKeyboardRow();
+        row2.add(locationBtn);
 
-    @Override
-    public String getBotUsername() {
-        return botProperties.name();
+        return InlineKeyboardMarkup.builder()
+                .keyboard(List.of(row1, row2))
+                .build();
     }
 }

@@ -1,3 +1,5 @@
+chat:
+  implementation: ${IMPL:local}
 spring:
   cloud:
     openfeign:
@@ -9,7 +11,7 @@ spring:
     ollama:
       base-url: http://localhost:11434
       chat:
-        model: gpt-oss:20b
+        model: gpt-oss:20b # gpt-oss:20b # nomic-embed-text:latest({"error":"\"nomic-embed-text:latest\" does not support chat"})
         options:
           temperature: 0.6 # Controls randomness in text generation (0.0 = deterministic, 1.0 = maximum randomness)
           top-p: 0.9 # Controls diversity via nucleus sampling (1.0 = consider all tokens, 0.1 = consider only top 10% probable tokens)
@@ -17,6 +19,8 @@ spring:
         options:
           temperature: 0.0
           model: nomic-embed-text
+ollama:
+  base-url: https://ollama.com
 server:
   port: ${PORT:8080}
 # Telegram API

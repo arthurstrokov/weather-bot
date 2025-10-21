@@ -5,11 +5,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
-/**
- * @author Arthur Strokov
- * @email arthurstrokov@gmail.com
- * @created 15.09.2022
- */
 @EnableFeignClients
 @SpringBootApplication
 @ConfigurationPropertiesScan

@@ -51,6 +51,7 @@ dependencies {
     // Lombok (compile-time code generation)
     compileOnly 'org.projectlombok:lombok:1.18.30'
     annotationProcessor 'org.projectlombok:lombok:1.18.30'
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 
     // Lombok for tests (optional)
     testCompileOnly 'org.projectlombok:lombok:1.18.30'

@@ -1,6 +1,5 @@
 package com.gmail.arthurstrokov.weather.configuration;
 
-import feign.Logger;
 import feign.RequestInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,11 +18,4 @@ public class OllamaFeignConfig {
             template.header("Content-Type", "application/json");
         };
     }
-
-    // (Опционально) Уровень логирования Feign
-    @Bean
-    Logger.Level feignLoggerLevel() {
-        return Logger.Level.BASIC;
-    }
 }
-

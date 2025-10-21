@@ -1,8 +1,7 @@
 package com.gmail.arthurstrokov.weather.service;
 
 import com.gmail.arthurstrokov.weather.gateway.OllamaClient;
-import com.gmail.arthurstrokov.weather.model.ChatMessage;
-import com.gmail.arthurstrokov.weather.model.ChatRequest;
+import com.gmail.arthurstrokov.weather.model.ModelRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
@@ -21,7 +20,7 @@ public class RemoteChatService implements ChatService {
     public String getWeatherForecastWithChat(String city) {
         String weatherForecastByCity = openWeatherService.getWeatherForecastByCity(city);
         String prompt = promptService.generatePrompt(city, weatherForecastByCity);
-        ChatRequest request = new ChatRequest("gpt-oss:20b", List.of(new ChatMessage("user", prompt)), false);
+        ModelRequest request = new ModelRequest("gpt-oss:20b", List.of(new ModelRequest.ChatMessage("user", prompt)), false);
         return ollamaClient.chat(request).message().content();
     }
 }

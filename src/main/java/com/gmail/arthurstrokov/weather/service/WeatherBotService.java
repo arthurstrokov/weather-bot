@@ -39,8 +39,8 @@ public class WeatherBotService extends TelegramLongPollingBot {
             /current  — текущая погода
             /forecast — прогноз погоды
             /location — отправить геолокацию
-            /test     — тестовый ответ
             """;
+    private static final String CITY = "Minsk";
 
     private final BotProperties botProperties;
     private final OpenWeatherService openWeatherService;
@@ -104,9 +104,9 @@ public class WeatherBotService extends TelegramLongPollingBot {
                 sendMsgWithInlineMenu(chatId, greeting);
             }
             case COMMAND_FORECAST -> sendMsgWithInlineMenu(chatId,
-                    openWeatherService.getWeatherForecastByCity("Minsk"));
+                    openWeatherService.getWeatherForecastByCity(CITY));
             case COMMAND_CURRENT -> sendMsgWithInlineMenu(chatId,
-                    openWeatherService.getCurrentWeatherByCity("Minsk"));
+                    openWeatherService.getCurrentWeatherByCity(CITY));
             case COMMAND_LOCATION -> sendLocationRequestKeyboard(chatId, "Отправьте вашу геолокацию:");
             default -> {
                 String weatherDescription = chatService.getWeatherForecastWithChat(text);
@@ -126,24 +126,24 @@ public class WeatherBotService extends TelegramLongPollingBot {
         String data = callback.getData();
         long chatId = callback.getMessage().getChatId();
 
-        safeAnswerCallback(callback.getId(), null);
+        safeAnswerCallback(callback.getId());
 
         switch (data) {
             case COMMAND_FORECAST -> sendMsgWithInlineMenu(chatId,
-                    openWeatherService.getWeatherForecastByCity("Minsk"));
+                    openWeatherService.getWeatherForecastByCity(CITY));
             case COMMAND_CURRENT -> sendMsgWithInlineMenu(chatId,
-                    openWeatherService.getCurrentWeatherByCity("Minsk"));
+                    openWeatherService.getCurrentWeatherByCity(CITY));
             case COMMAND_LOCATION -> sendLocationRequestKeyboard(chatId,
                     "Нажмите кнопку ниже, чтобы поделиться локацией:");
             default -> sendMsgWithInlineMenu(chatId, "Неизвестная команда.");
         }
     }
 
-    private void safeAnswerCallback(String callbackId, String text) {
+    private void safeAnswerCallback(String callbackId) {
         try {
             AnswerCallbackQuery answer = AnswerCallbackQuery.builder()
                     .callbackQueryId(callbackId)
-                    .text(text)
+                    .text(null)
                     .showAlert(false)
                     .build();
             execute(answer);

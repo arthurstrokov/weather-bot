@@ -21,6 +21,7 @@ spring:
           model: nomic-embed-text
 ollama:
   base-url: https://ollama.com
+  api-key: ${OLLAMA_API_KEY}
 server:
   port: ${PORT:8080}
 # Telegram API

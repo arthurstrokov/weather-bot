@@ -75,6 +75,12 @@ tasks.named('test') {
     finalizedBy jacocoTestReport
 }
 
+test {
+    systemProperty('spring.profiles.active', 'test')
+    systemProperty('file.encoding', 'utf-8')
+    systemProperty('user.timezone', 'Europe/Moscow')
+}
+
 jacocoTestReport {
     dependsOn test
     reports {

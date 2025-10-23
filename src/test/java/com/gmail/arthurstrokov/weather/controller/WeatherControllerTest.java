@@ -10,6 +10,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.wiremock.spring.EnableWireMock;
 
+import static com.github.tomakehurst.wiremock.client.WireMock.exactly;
+import static com.github.tomakehurst.wiremock.client.WireMock.getRequestedFor;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
+import static com.github.tomakehurst.wiremock.client.WireMock.verify;
 import static com.gmail.arthurstrokov.weather.util.CommonUtils.getJson;
 import static com.gmail.arthurstrokov.weather.util.StubHelper.stubForGetREST;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -48,5 +52,6 @@ class WeatherControllerTest {
                         content().contentType(APPLICATION_JSON_VALUE),
                         content().json(getJson(expectedJsonResponse))
                 );
+        verify(exactly(1), getRequestedFor(urlEqualTo("/forecast?q=Minsk&mode=json&units=metric&lang=en&cnt=4&appid=key")));
     }
 }

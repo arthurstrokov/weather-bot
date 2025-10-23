@@ -38,7 +38,7 @@ public class BotService implements SpringLongPollingBot, LongPollingSingleThread
     private static final String COMMAND_CURRENT = "/current";
     private static final String COMMAND_LOCATION = "/location";
 
-    private static final String BUTTON_LOCATION_TEXT = "Share location";
+    private static final String BUTTON_LOCATION_TEXT = "Поделиться геолокацией";
     private static final String MENU_PROMPT = "Выберите действие:";
     private static final String HELP_TEXT = """
             Привет! Я бот погоды.
@@ -67,9 +67,10 @@ public class BotService implements SpringLongPollingBot, LongPollingSingleThread
     public void initCommands() {
         try {
             List<BotCommand> commands = List.of(
+                    new BotCommand(COMMAND_START, "Начало"),
                     new BotCommand(COMMAND_CURRENT, "Текущая погода"),
                     new BotCommand(COMMAND_FORECAST, "Прогноз погоды"),
-                    new BotCommand(COMMAND_LOCATION, "Поделиться локацией")
+                    new BotCommand(COMMAND_LOCATION, "Поделиться геолокацией")
             );
             telegramClient.execute(SetMyCommands.builder()
                     .commands(commands)
@@ -240,17 +241,17 @@ public class BotService implements SpringLongPollingBot, LongPollingSingleThread
 
     private InlineKeyboardMarkup buildInlineMenu() {
         InlineKeyboardButton forecastBtn = InlineKeyboardButton.builder()
-                .text("🌤 Forecast")
+                .text("🌤 Прогноз")
                 .callbackData(COMMAND_FORECAST)
                 .build();
 
         InlineKeyboardButton currentBtn = InlineKeyboardButton.builder()
-                .text("🌤 Current")
+                .text("🌤 Текущая")
                 .callbackData(COMMAND_CURRENT)
                 .build();
 
         InlineKeyboardButton locationBtn = InlineKeyboardButton.builder()
-                .text("📍 Share location")
+                .text("📍 Поделиться геолокацией")
                 .callbackData(COMMAND_LOCATION)
                 .build();
 

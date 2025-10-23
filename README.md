@@ -161,3 +161,6 @@ No license file detected in the repository.
 - A general Docker-based deployment is supported via the provided Dockerfile.
 - Any cloud-specific steps (e.g., Railway, Fly.io, etc.) are not maintained here.
 - TODO: Provide concrete deployment instructions for your target platform once chosen.
+
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/874083ead14a4cc9b9fa5a359b959398)](https://app.codacy.com/gh/arthurstrokov/weather-bot/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
+[![DeepSource](https://app.deepsource.com/gh/arthurstrokov/weather-bot.svg/?label=code+coverage&show_trend=true&token=7F9hB8-lC31CNOPWLN9EA6CE)](https://app.deepsource.com/gh/arthurstrokov/weather-bot/)

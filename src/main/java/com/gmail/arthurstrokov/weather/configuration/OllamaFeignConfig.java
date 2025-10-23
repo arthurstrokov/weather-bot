@@ -12,7 +12,7 @@ public class OllamaFeignConfig {
 
     private static final String AUTH_HEADER = "Authorization";
 
-    @Value("${ollama.api-key}")
+    @Value("${ollama.api-key:}")
     private String apiKey;
 
     @Bean

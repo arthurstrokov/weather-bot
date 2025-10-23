@@ -21,7 +21,7 @@ spring:
           model: nomic-embed-text
 ollama:
   base-url: https://ollama.com
-  api-key: key
+  api-key: test-key
 # Telegram API
 bot:
   name: WeatherForTomorrowBot

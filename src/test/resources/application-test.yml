@@ -21,6 +21,7 @@ spring:
           model: nomic-embed-text
 ollama:
   base-url: https://ollama.com
+  model: gpt-oss:120b-cloud
   api-key: test-key
 # Telegram API
 bot:

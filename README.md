@@ -1,34 +1,31 @@
 # Weather Bot
 
-https://github.com/rubenlagus/TelegramBots
-https://rubenlagus.github.io/TelegramBotsDocumentation/telegram-bots.html
-
-A Spring Boot 3 application that exposes REST endpoints and a Telegram long‑polling bot to deliver current weather data and short‑term forecasts using the OpenWeather API. The app also integrates Spring AI with a local Ollama model to enrich forecast descriptions and provides Prometheus metrics via Spring Boot Actuator.
+A Spring Boot 3 application that exposes REST endpoints and a Telegram long‑polling bot to deliver current weather data and short‑term forecasts using the OpenWeather API. The app can optionally use a local or remote Ollama model (via Spring AI or Feign) to enrich textual responses, and provides Prometheus metrics via Spring Boot Actuator.
 
 ## Stack
 - Language: Java 21
 - Build tool / package manager: Gradle (wrapper included)
 - Frameworks & libraries:
   - Spring Boot 3.4.x (Web, Actuator)
-  - Spring Cloud OpenFeign (HTTP client for OpenWeather and Ollama)
+  - Spring Cloud OpenFeign (HTTP clients)
   - Spring AI (MCP Server WebMVC, Ollama model client)
-  - TelegramBots (long polling)
+  - TelegramBots long‑polling starter (9.2.0)
   - Micrometer + Prometheus registry
   - Lombok
   - Testing: JUnit 5, Spring Boot Test, WireMock
 - Container: Dockerfile provided
 
 ## Overview
-- REST API to fetch current weather and forecasts from OpenWeather.
+- REST API to fetch current weather and short forecast from OpenWeather.
 - Telegram bot to query weather via commands and inline keyboard.
-- Optional AI enrichment of forecasts using a local/remote Ollama model (via Spring AI or Feign, depending on implementation).
+- Optional AI enrichment of responses using Ollama (local via Spring AI, or remote via Feign).
 - Actuator endpoints and Prometheus metrics for observability.
 
 ## Requirements
 - JDK 21+
 - Internet access to OpenWeather API
 - Telegram bot credentials (from BotFather)
-- Optional: Local Ollama runtime if you want AI‑enriched responses with the "local" chat implementation (default Spring AI base URL: http://localhost:11434)
+- Optional: Local Ollama runtime if you use the "local" chat implementation (default Spring AI base URL: http://localhost:11434)
 - Docker (optional, for containerized runs)
 
 ## Configuration (Environment Variables)
@@ -36,26 +33,23 @@ Values map to src/main/resources/application.yml. Do not commit secrets.
 
 Core application
 - PORT — HTTP port. Default: 8080
-- IMPL — Chat implementation selector. Default: local. Allowed: local, remote
-- Logging levels — configured in application.yml (override via SPRING_APPLICATION_JSON or specific envs if needed)
+- IMPL — Chat implementation selector (maps to chat.implementation). Default: local. Allowed: local, remote
 
-Telegram bot
+Telegram bot (bot.*)
 - BOT_NAME — Public Telegram bot name. Default: WeatherForTomorrowBot
 - BOT_TOKEN — Telegram bot token. Required for bot to work
 - BOT_CHAT_ID — Optional chat id for diagnostics
 
-OpenWeather
+OpenWeather (open.weather.*)
 - OPEN_API_KEY — OpenWeather API key. Required
 - OPEN_API_BASE_URL — Base URL for OpenWeather API. Default: https://api.openweathermap.org/data/2.5
 
 Ollama / AI
-- spring.ai.ollama.base-url — Spring AI base URL. Default: http://localhost:11434
-  - Can be overridden via env var SPRING_AI_OLLAMA_BASE_URL
+- SPRING_AI_OLLAMA_BASE_URL — Spring AI base URL. Default: http://localhost:11434 (property key: spring.ai.ollama.base-url)
 - OLLAMA_BASE_URL — Feign client base URL for the remote chat implementation. Default: https://ollama.com (property key: ollama.base-url)
-- Models (defaults in application.yml)
-  - Chat model: gpt-oss:20b
-  - Embedding model: nomic-embed-text
-- TODO: Externalize all Spring AI options (temperature, top-p, model names) as environment variables if deployment requires it
+- OLLAMA_API_KEY — Optional API key for remote Ollama if required (property key: ollama.api-key)
+- Models and options have defaults in application.yml (e.g., chat model gpt-oss:20b; temperature, top-p). 
+  - TODO: Externalize all Spring AI options (temperature, top-p, model names) as dedicated environment variables if needed for deployment.
 
 ## Endpoints
 REST (JSON)
@@ -70,9 +64,16 @@ Actuator/metrics
 - Application main class: com.gmail.arthurstrokov.weather.Application
 - REST controller: com.gmail.arthurstrokov.weather.controller.WeatherController
 - Telegram bot service: com.gmail.arthurstrokov.weather.service.BotService
-- Chat implementations (select via IMPL env):
-  - local → com.gmail.arthurstrokov.weather.service.LocalChatService (Spring AI ChatModel)
-  - remote → com.gmail.arthurstrokov.weather.service.RemoteChatService (Feign to OllamaClient)
+- Weather API gateway: com.gmail.arthurstrokov.weather.gateway.WeatherGateway
+- Chat implementations (selected via IMPL / chat.implementation):
+  - local → com.gmail.arthurstrokov.weather.gateway.LocalChatGateway (Spring AI ChatModel)
+  - remote → com.gmail.arthurstrokov.weather.gateway.RemoteChatGateway (Feign to OllamaClient)
+
+Bot commands
+- /current — current weather
+- /forecast — forecast
+- /location — share location (request location button)
+- /start — help menu and command setup
 
 ## Setup
 1) Clone repository and configure environment variables (see above). At minimum, set OPEN_API_KEY and BOT_TOKEN to enable both REST and Telegram features.
@@ -132,16 +133,16 @@ Common Gradle tasks
 - Dockerfile — multi-stage build and runtime (EXPOSE/ENV PORT=8080)
 - src/main/java/com/gmail/arthurstrokov/weather/
   - Application.java — Spring Boot entry point
-  - configuration/ — configuration properties and beans (BotProperties, OpenWeatherProperties, ToolConfiguration, OllamaFeignConfig)
-  - controller/OpenWeatherApiController.java — REST endpoints
-  - gateway/ — OpenFeign clients (OpenWeatherApiClient, OllamaClient)
-  - model/ — DTOs for Ollama chat
-  - service/ — business services (OpenWeatherService, WeatherBotService, PromptService, ChatService impls)
-  - startup/ApplicationRunnerImpl.java — application startup wiring
+  - configuration/ — configuration properties and beans (BotProperties, OpenWeatherProperties, OllamaFeignConfig, ToolConfiguration)
+  - controller/WeatherController.java — REST endpoints
+  - client/ — Feign clients (OpenWeatherClient, OllamaClient)
+  - gateway/ — app gateways (WeatherGateway, LocalChatGateway, RemoteChatGateway)
+  - model/ — DTOs for chat
+  - service/ — business services (BotService, PromptService, WeatherService)
   - template/PromptTemplate.java — AI prompt templates
   - tool/WeatherTool.java — tool integration for AI
 - src/main/resources/
-  - application.yml — application configuration (server port, bot, open weather, AI, actuator/metrics)
+  - application.yml — app configuration (server port, bot, open weather, AI, actuator/metrics)
   - bootstrap.yml — Spring bootstrap config (if used)
 - src/test/java/... — tests and test utilities
 

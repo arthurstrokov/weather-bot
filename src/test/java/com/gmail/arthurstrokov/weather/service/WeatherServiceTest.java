@@ -27,15 +27,15 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 )
 @EnableWireMock
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
-class LocalChatServiceTest {
+class WeatherServiceTest {
 
-    private final LocalChatService localChatService;
+    private final WeatherService weatherService;
     private final ChatModel chatModel;
 
     /**
-     * Method under test: {@link LocalChatService#getWeatherForecastWithChat(String)}
+     * Method under test: {@link WeatherService#getWeatherForecastWithChat(String)}
      * <p>
-     * Verifies that LocalChatService interacts with the chat model to produce a weather forecast.
+     * Verifies that ChatService interacts with the chat model to produce a weather forecast.
      * The output is evaluated using a fact-checking evaluator to ensure it meets expected criteria.
      * The model must support fact-checking. If possible, it should also return score and metadata
      * to enrich the evaluation result.
@@ -46,7 +46,7 @@ class LocalChatServiceTest {
         // given
         stubForGetREST("/forecast?q=Minsk&mode=json&units=metric&lang=en&cnt=4&appid=key",
                 "/forecast/expected.json");
-        String minsk = localChatService.getWeatherForecastWithChat("Minsk");
+        String minsk = weatherService.getWeatherForecastWithChat("Minsk");
         log.info(minsk);
 
         String userText = """

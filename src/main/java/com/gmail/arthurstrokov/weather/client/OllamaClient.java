@@ -1,4 +1,4 @@
-package com.gmail.arthurstrokov.weather.gateway;
+package com.gmail.arthurstrokov.weather.client;
 
 import com.gmail.arthurstrokov.weather.configuration.OllamaFeignConfig;
 import com.gmail.arthurstrokov.weather.model.ModelRequest;

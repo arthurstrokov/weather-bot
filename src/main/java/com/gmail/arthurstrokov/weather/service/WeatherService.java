@@ -1,58 +1,29 @@
 package com.gmail.arthurstrokov.weather.service;
 
-import com.gmail.arthurstrokov.weather.configuration.OpenWeatherProperties;
-import com.gmail.arthurstrokov.weather.gateway.OpenWeatherApiClient;
+
+import com.gmail.arthurstrokov.weather.gateway.ChatGateway;
+import com.gmail.arthurstrokov.weather.gateway.WeatherGateway;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class WeatherService {
 
-    private final OpenWeatherApiClient openWeatherApiClient;
-    private final OpenWeatherProperties openWeatherProperties;
+    private final PromptService promptService;
+    private final WeatherGateway weatherGateway;
+    private final ChatGateway chatGateway;
 
-    public String getCurrentWeatherByCity(String city) {
-        return openWeatherApiClient.getCurrentWeatherByCity(
-                city,
-                openWeatherProperties.getMode(),
-                openWeatherProperties.getUnits(),
-                openWeatherProperties.getLang(),
-                openWeatherProperties.getOpenApiKey()
-        );
-    }
-
-    public String getCurrentWeatherByGeographicCoordinates(double latitude, double longitude) {
-        return openWeatherApiClient.getCurrentWeatherByGeographicCoordinates(
-                Double.toString(latitude),
-                Double.toString(longitude),
-                openWeatherProperties.getMode(),
-                openWeatherProperties.getUnits(),
-                openWeatherProperties.getLang(),
-                openWeatherProperties.getOpenApiKey()
-        );
-    }
-
-    public String getWeatherForecastByCity(String city) {
-        return openWeatherApiClient.getWeatherForecastByCity(
-                city,
-                openWeatherProperties.getMode(),
-                openWeatherProperties.getUnits(),
-                openWeatherProperties.getLang(),
-                openWeatherProperties.getCnt(),
-                openWeatherProperties.getOpenApiKey()
-        );
-    }
-
-    public String getWeatherForecastByGeographicCoordinates(double latitude, double longitude) {
-        return openWeatherApiClient.getWeatherForecastByGeographicCoordinates(
-                Double.toString(latitude),
-                Double.toString(longitude),
-                openWeatherProperties.getMode(),
-                openWeatherProperties.getUnits(),
-                openWeatherProperties.getLang(),
-                openWeatherProperties.getCnt(),
-                openWeatherProperties.getOpenApiKey()
-        );
+    public String getWeatherForecastWithChat(String city) {
+        log.info("Starting LLM request for city: {}", city);
+        String weatherForecastByCity = weatherGateway.getWeatherForecastByCity(city);
+        String prompt = promptService.generatePrompt(city, weatherForecastByCity);
+        log.debug("Generated prompt for LLM: {}", prompt);
+        String response = chatGateway.getChat(prompt);
+        log.info("LLM request completed for city: {}", city);
+        log.debug("LLM response: {}", response);
+        return response;
     }
 }

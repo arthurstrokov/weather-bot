@@ -1,6 +1,6 @@
-package com.gmail.arthurstrokov.weather.service;
+package com.gmail.arthurstrokov.weather.gateway;
 
-import com.gmail.arthurstrokov.weather.gateway.OllamaClient;
+import com.gmail.arthurstrokov.weather.client.OllamaClient;
 import com.gmail.arthurstrokov.weather.model.ModelRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -11,15 +11,12 @@ import java.util.List;
 @ConditionalOnProperty(name = "chat.implementation", havingValue = "remote")
 @Component
 @RequiredArgsConstructor
-public class RemoteChatService implements ChatService {
+public class RemoteChatGateway implements ChatGateway {
 
     private final OllamaClient ollamaClient;
-    private final PromptService promptService;
-    private final WeatherService weatherService;
 
-    public String getWeatherForecastWithChat(String city) {
-        String weatherForecastByCity = weatherService.getWeatherForecastByCity(city);
-        String prompt = promptService.generatePrompt(city, weatherForecastByCity);
+    @Override
+    public String getChat(String prompt) {
         ModelRequest request = new ModelRequest("gpt-oss:20b", List.of(new ModelRequest.ChatMessage("user", prompt)), false);
         return ollamaClient.chat(request).message().content();
     }

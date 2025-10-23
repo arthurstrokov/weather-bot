@@ -40,6 +40,7 @@ public class WeatherBotService implements SpringLongPollingBot, LongPollingSingl
     private static final String BUTTON_LOCATION_TEXT = "Share location";
     private static final String MENU_PROMPT = "Выберите действие:";
     private static final String HELP_TEXT = """
+            Привет! Я бот погоды.
             Доступные команды:
             /current  — текущая погода
             /forecast — прогноз погоды
@@ -122,26 +123,23 @@ public class WeatherBotService implements SpringLongPollingBot, LongPollingSingl
             return;
         }
 
-        if (!message.hasText() || !StringUtils.hasText(message.getText())) {
+        String text = message.getText();
+        if (!StringUtils.hasText(text)) {
             sendInlineMenu(chatId);
             return;
         }
 
-        String text = message.getText().trim();
+        handleTextCommand(chatId, text.trim());
+    }
+
+    private void handleTextCommand(long chatId, String text) {
         switch (text.toLowerCase(Locale.ROOT)) {
-            case COMMAND_START -> {
-                String greeting = "Привет! Я бот погоды.\n\n" + HELP_TEXT;
-                sendMsgWithInlineMenu(chatId, greeting);
-            }
-            case COMMAND_FORECAST -> sendMsgWithInlineMenu(chatId,
-                    weatherService.getWeatherForecastByCity(DEFAULT_CITY));
-            case COMMAND_CURRENT -> sendMsgWithInlineMenu(chatId,
-                    weatherService.getCurrentWeatherByCity(DEFAULT_CITY));
+            case COMMAND_START -> sendMsgWithInlineMenu(chatId, HELP_TEXT);
+            case COMMAND_FORECAST ->
+                    sendMsgWithInlineMenu(chatId, weatherService.getWeatherForecastByCity(DEFAULT_CITY));
+            case COMMAND_CURRENT -> sendMsgWithInlineMenu(chatId, weatherService.getCurrentWeatherByCity(DEFAULT_CITY));
             case COMMAND_LOCATION -> sendLocationRequestKeyboard(chatId, "Отправьте вашу геолокацию:");
-            default -> {
-                String weatherDescription = chatService.getWeatherForecastWithChat(text);
-                sendMsgWithInlineMenu(chatId, weatherDescription);
-            }
+            default -> sendMsgWithInlineMenu(chatId, chatService.getWeatherForecastWithChat(text));
         }
     }
 

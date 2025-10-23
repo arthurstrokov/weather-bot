@@ -1,11 +1,11 @@
-package com.gmail.arthurstrokov.weather.gateway;
+package com.gmail.arthurstrokov.weather.client;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @FeignClient(name = "OpenWeatherApiClient", url = "${open.weather.url.base-url}")
-public interface OpenWeatherApiClient {
+public interface OpenWeatherClient {
 
     @GetMapping("/weather")
     String getCurrentWeatherByCity(

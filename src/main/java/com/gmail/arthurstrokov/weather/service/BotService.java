@@ -1,6 +1,7 @@
 package com.gmail.arthurstrokov.weather.service;
 
 import com.gmail.arthurstrokov.weather.configuration.BotProperties;
+import com.gmail.arthurstrokov.weather.gateway.WeatherGateway;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -30,7 +31,7 @@ import java.util.Locale;
 
 @Slf4j
 @Service
-public class WeatherBotService implements SpringLongPollingBot, LongPollingSingleThreadUpdateConsumer {
+public class BotService implements SpringLongPollingBot, LongPollingSingleThreadUpdateConsumer {
 
     private static final String COMMAND_START = "/start";
     private static final String COMMAND_FORECAST = "/forecast";
@@ -49,16 +50,16 @@ public class WeatherBotService implements SpringLongPollingBot, LongPollingSingl
     private static final String DEFAULT_CITY = "Minsk";
 
     private final BotProperties botProperties;
+    private final WeatherGateway weatherGateway;
     private final WeatherService weatherService;
-    private final ChatService chatService;
     private final TelegramClient telegramClient;
 
-    public WeatherBotService(BotProperties botProperties,
-                             WeatherService weatherService,
-                             ChatService chatService) {
+    public BotService(BotProperties botProperties,
+                      WeatherGateway weatherGateway,
+                      WeatherService weatherService) {
         this.botProperties = botProperties;
+        this.weatherGateway = weatherGateway;
         this.weatherService = weatherService;
-        this.chatService = chatService;
         this.telegramClient = new OkHttpTelegramClient(getBotToken());
     }
 
@@ -136,17 +137,17 @@ public class WeatherBotService implements SpringLongPollingBot, LongPollingSingl
         switch (text.toLowerCase(Locale.ROOT)) {
             case COMMAND_START -> sendMsgWithInlineMenu(chatId, HELP_TEXT);
             case COMMAND_FORECAST ->
-                    sendMsgWithInlineMenu(chatId, weatherService.getWeatherForecastByCity(DEFAULT_CITY));
-            case COMMAND_CURRENT -> sendMsgWithInlineMenu(chatId, weatherService.getCurrentWeatherByCity(DEFAULT_CITY));
+                    sendMsgWithInlineMenu(chatId, weatherGateway.getWeatherForecastByCity(DEFAULT_CITY));
+            case COMMAND_CURRENT -> sendMsgWithInlineMenu(chatId, weatherGateway.getCurrentWeatherByCity(DEFAULT_CITY));
             case COMMAND_LOCATION -> sendLocationRequestKeyboard(chatId, "Отправьте вашу геолокацию:");
-            default -> sendMsgWithInlineMenu(chatId, chatService.getWeatherForecastWithChat(text));
+            default -> sendMsgWithInlineMenu(chatId, weatherService.getWeatherForecastWithChat(text));
         }
     }
 
     private void handleLocation(long chatId, Message message) {
         double lat = message.getLocation().getLatitude();
         double lon = message.getLocation().getLongitude();
-        String reply = weatherService.getWeatherForecastByGeographicCoordinates(lat, lon);
+        String reply = weatherGateway.getWeatherForecastByGeographicCoordinates(lat, lon);
         sendMsgWithInlineMenu(chatId, reply);
     }
 
@@ -158,9 +159,9 @@ public class WeatherBotService implements SpringLongPollingBot, LongPollingSingl
 
         switch (data) {
             case COMMAND_FORECAST -> sendMsgWithInlineMenu(chatId,
-                    weatherService.getWeatherForecastByCity(DEFAULT_CITY));
+                    weatherGateway.getWeatherForecastByCity(DEFAULT_CITY));
             case COMMAND_CURRENT -> sendMsgWithInlineMenu(chatId,
-                    weatherService.getCurrentWeatherByCity(DEFAULT_CITY));
+                    weatherGateway.getCurrentWeatherByCity(DEFAULT_CITY));
             case COMMAND_LOCATION -> sendLocationRequestKeyboard(chatId,
                     "Нажмите кнопку ниже, чтобы поделиться локацией:");
             default -> sendMsgWithInlineMenu(chatId, "Неизвестная команда.");

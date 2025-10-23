@@ -1,6 +1,7 @@
 package com.gmail.arthurstrokov.weather.gateway;
 
 import com.gmail.arthurstrokov.weather.client.OllamaClient;
+import com.gmail.arthurstrokov.weather.model.ChatMessage;
 import com.gmail.arthurstrokov.weather.model.ModelRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -17,7 +18,7 @@ public class RemoteChatGateway implements ChatGateway {
 
     @Override
     public String getChat(String prompt) {
-        ModelRequest request = new ModelRequest("gpt-oss:20b", List.of(new ModelRequest.ChatMessage("user", prompt)), false);
+        ModelRequest request = new ModelRequest("gpt-oss:20b", List.of(new ChatMessage("user", prompt)), false);
         return ollamaClient.chat(request).message().content();
     }
 }

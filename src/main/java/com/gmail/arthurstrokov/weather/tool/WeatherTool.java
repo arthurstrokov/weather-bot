@@ -15,8 +15,8 @@ public class WeatherTool {
         this.weatherService = weatherService;
     }
 
-    @Tool(description = "Получение прогноза погоды")
-    public String getWeatherForecastWithChat(@ToolParam(description = "Запрос пользователя") String city) {
+    @Tool(name = "getWeather", description = "Получение прогноза погоды")
+    public String getWeather(@ToolParam(description = "Город") String city) {
         return weatherService.getWeatherForecastWithChat(city);
     }
 }

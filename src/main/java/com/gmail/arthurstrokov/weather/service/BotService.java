@@ -33,21 +33,32 @@ import java.util.Locale;
 @Service
 public class BotService implements SpringLongPollingBot, LongPollingSingleThreadUpdateConsumer {
 
+    // Команды
     private static final String COMMAND_START = "/start";
+    private static final String COMMAND_HELP = "/help";
     private static final String COMMAND_FORECAST = "/forecast";
     private static final String COMMAND_CURRENT = "/current";
     private static final String COMMAND_LOCATION = "/location";
 
+    // Тексты
     private static final String BUTTON_LOCATION_TEXT = "Поделиться геолокацией";
+    private static final String COMMAND_START_TEXT = "Начало";
+    private static final String COMMAND_CURRENT_TEXT = "Текущая погода";
+    private static final String COMMAND_FORECAST_TEXT = "Прогноз погоды";
     private static final String MENU_PROMPT = "Выберите действие:";
     private static final String HELP_TEXT = """
             Привет! Я бот погоды.
             Доступные команды:
+            /start    — начало работы
+            /help     — справка
             /current  — текущая погода
             /forecast — прогноз погоды
             /location — отправить геолокацию
             """;
     private static final String DEFAULT_CITY = "Minsk";
+    private static final String UNKNOWN_COMMAND = "Неизвестная команда.";
+    private static final String LOCATION_PROMPT = "Отправьте вашу геолокацию:";
+    private static final String LOCATION_BUTTON_PROMPT = "Нажмите кнопку ниже, чтобы поделиться локацией:";
 
     private final BotProperties botProperties;
     private final WeatherGateway weatherGateway;
@@ -61,16 +72,17 @@ public class BotService implements SpringLongPollingBot, LongPollingSingleThread
         this.weatherGateway = weatherGateway;
         this.weatherService = weatherService;
         this.telegramClient = new OkHttpTelegramClient(getBotToken());
+        log.info("BotService initialized for bot: {}", botProperties.name());
     }
 
     @PostConstruct
     public void initCommands() {
         try {
             List<BotCommand> commands = List.of(
-                    new BotCommand(COMMAND_START, "Начало"),
-                    new BotCommand(COMMAND_CURRENT, "Текущая погода"),
-                    new BotCommand(COMMAND_FORECAST, "Прогноз погоды"),
-                    new BotCommand(COMMAND_LOCATION, "Поделиться геолокацией")
+                    new BotCommand(COMMAND_START, COMMAND_START_TEXT),
+                    new BotCommand(COMMAND_CURRENT, COMMAND_CURRENT_TEXT),
+                    new BotCommand(COMMAND_FORECAST, COMMAND_FORECAST_TEXT),
+                    new BotCommand(COMMAND_LOCATION, BUTTON_LOCATION_TEXT)
             );
             telegramClient.execute(SetMyCommands.builder()
                     .commands(commands)
@@ -136,11 +148,11 @@ public class BotService implements SpringLongPollingBot, LongPollingSingleThread
 
     private void handleTextCommand(long chatId, String text) {
         switch (text.toLowerCase(Locale.ROOT)) {
-            case COMMAND_START -> sendMsgWithInlineMenu(chatId, HELP_TEXT);
+            case COMMAND_START, COMMAND_HELP -> sendMsgWithInlineMenu(chatId, HELP_TEXT);
             case COMMAND_FORECAST ->
                     sendMsgWithInlineMenu(chatId, weatherGateway.getWeatherForecastByCity(DEFAULT_CITY));
             case COMMAND_CURRENT -> sendMsgWithInlineMenu(chatId, weatherGateway.getCurrentWeatherByCity(DEFAULT_CITY));
-            case COMMAND_LOCATION -> sendLocationRequestKeyboard(chatId, "Отправьте вашу геолокацию:");
+            case COMMAND_LOCATION -> sendLocationRequestKeyboard(chatId, LOCATION_PROMPT);
             default -> sendMsgWithInlineMenu(chatId, weatherService.getWeatherForecastWithChat(text));
         }
     }
@@ -163,9 +175,8 @@ public class BotService implements SpringLongPollingBot, LongPollingSingleThread
                     weatherGateway.getWeatherForecastByCity(DEFAULT_CITY));
             case COMMAND_CURRENT -> sendMsgWithInlineMenu(chatId,
                     weatherGateway.getCurrentWeatherByCity(DEFAULT_CITY));
-            case COMMAND_LOCATION -> sendLocationRequestKeyboard(chatId,
-                    "Нажмите кнопку ниже, чтобы поделиться локацией:");
-            default -> sendMsgWithInlineMenu(chatId, "Неизвестная команда.");
+            case COMMAND_LOCATION -> sendLocationRequestKeyboard(chatId, LOCATION_BUTTON_PROMPT);
+            default -> sendMsgWithInlineMenu(chatId, UNKNOWN_COMMAND);
         }
     }
 

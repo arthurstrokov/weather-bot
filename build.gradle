@@ -1,5 +1,5 @@
 plugins {
-    id 'org.springframework.boot' version '3.4.5'
+    id 'org.springframework.boot' version '3.4.3'
     id 'io.spring.dependency-management' version '1.1.7'
     id 'java'
     id 'jacoco'
@@ -33,6 +33,9 @@ dependencies {
     // Spring Boot starters
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
     // Spring Cloud
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
@@ -50,13 +53,11 @@ dependencies {
     implementation 'org.springframework.ai:spring-ai-starter-model-ollama'
 
     // Lombok (compile-time code generation)
-    compileOnly 'org.projectlombok:lombok:1.18.30'
-    annotationProcessor 'org.projectlombok:lombok:1.18.30'
-    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
-
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
     // Lombok for tests (optional)
-    testCompileOnly 'org.projectlombok:lombok:1.18.30'
-    testAnnotationProcessor 'org.projectlombok:lombok:1.18.30'
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
 
     // Testing
     testImplementation 'org.springframework.boot:spring-boot-starter-test'

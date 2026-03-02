@@ -1,8 +1,11 @@
 package com.gmail.arthurstrokov.weather.configuration;
 
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.validation.annotation.Validated;
 
 @ConfigurationProperties(prefix = "open.weather")
+@Validated
 public record OpenWeatherProperties(
         String key,
         Url url,
@@ -18,6 +21,7 @@ public record OpenWeatherProperties(
     /**
      * OpenWeather API access token supplied via environment.
      */
+    @NotBlank(message = "OpenWeather API key must not be blank")
     public String getOpenApiKey() {
         return key;
     }

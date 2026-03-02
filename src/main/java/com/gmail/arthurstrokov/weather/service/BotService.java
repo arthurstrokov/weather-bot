@@ -90,8 +90,9 @@ public class BotService implements SpringLongPollingBot, LongPollingSingleThread
                     .languageCode(null)
                     .build()
             );
+            log.info("Bot commands registered successfully");
         } catch (Exception e) {
-            log.error("Failed to set bot commands", e);
+            log.error("Failed to set bot commands: {}", e.getMessage(), e);
         }
     }
 
@@ -189,7 +190,7 @@ public class BotService implements SpringLongPollingBot, LongPollingSingleThread
                     .showAlert(false)
                     .build());
         } catch (Exception e) {
-            log.error("Error answering callback", e);
+            log.error("Error answering callback: {}", e.getMessage());
         }
     }
 
@@ -203,7 +204,8 @@ public class BotService implements SpringLongPollingBot, LongPollingSingleThread
             msg.enableHtml(true);
             telegramClient.execute(msg);
         } catch (Exception e) {
-            log.error("Error sending message", e);
+            log.error("Error sending message: {}", e.getMessage());
+            sendErrorMessage(chatId);
         }
     }
 
@@ -217,7 +219,8 @@ public class BotService implements SpringLongPollingBot, LongPollingSingleThread
             msg.enableHtml(true);
             telegramClient.execute(msg);
         } catch (Exception e) {
-            log.error("Error sending inline menu", e);
+            log.error("Error sending inline menu: {}", e.getMessage());
+            sendErrorMessage(chatId);
         }
     }
 
@@ -244,7 +247,20 @@ public class BotService implements SpringLongPollingBot, LongPollingSingleThread
             msg.enableHtml(true);
             telegramClient.execute(msg);
         } catch (Exception e) {
-            log.error("Error sending location keyboard", e);
+            log.error("Error sending location keyboard: {}", e.getMessage());
+            sendErrorMessage(chatId);
+        }
+    }
+
+    private void sendErrorMessage(long chatId) {
+        try {
+            SendMessage msg = SendMessage.builder()
+                    .chatId(chatId)
+                    .text("⚠️ Произошла ошибка при обработке запроса. Пожалуйста, попробуйте позже.")
+                    .build();
+            telegramClient.execute(msg);
+        } catch (Exception ex) {
+            log.error("Error sending error message: {}", ex.getMessage());
         }
     }
 

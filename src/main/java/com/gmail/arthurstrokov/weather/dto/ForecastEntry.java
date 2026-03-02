@@ -8,11 +8,6 @@ import lombok.experimental.FieldDefaults;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author Arthur Strokov
- * @email arthurstrokov@gmail.com
- * @created 25.09.2022
- */
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ForecastEntry {

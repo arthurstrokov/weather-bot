@@ -1,5 +1,6 @@
 package com.gmail.arthurstrokov.weather.client;
 
+import com.gmail.arthurstrokov.weather.dto.WeatherForecastDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,7 +28,7 @@ public interface OpenWeatherClient {
     );
 
     @GetMapping("/forecast")
-    String getWeatherForecastByCity(
+    WeatherForecastDTO getWeatherForecastByCity(
             @RequestParam("q") String q,
             @RequestParam("mode") String mode,
             @RequestParam("units") String units,
@@ -37,7 +38,7 @@ public interface OpenWeatherClient {
     );
 
     @GetMapping("/forecast")
-    String getWeatherForecastByGeographicCoordinates(
+    WeatherForecastDTO getWeatherForecastByGeographicCoordinates(
             @RequestParam("lat") String lat,
             @RequestParam("lon") String lon,
             @RequestParam("mode") String mode,

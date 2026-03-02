@@ -1,4 +1,4 @@
-package com.gmail.arthurstrokov.weather.configuration;
+package com.gmail.arthurstrokov.weather.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

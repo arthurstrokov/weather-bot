@@ -1,6 +1,6 @@
 package com.gmail.arthurstrokov.weather.service;
 
-import com.gmail.arthurstrokov.weather.configuration.BotProperties;
+import com.gmail.arthurstrokov.weather.properties.BotProperties;
 import com.gmail.arthurstrokov.weather.gateway.WeatherGateway;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

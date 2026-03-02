@@ -1,7 +1,7 @@
 package com.gmail.arthurstrokov.weather.gateway;
 
 import com.gmail.arthurstrokov.weather.client.OpenWeatherClient;
-import com.gmail.arthurstrokov.weather.configuration.OpenWeatherProperties;
+import com.gmail.arthurstrokov.weather.properties.OpenWeatherProperties;
 import com.gmail.arthurstrokov.weather.dto.WeatherForecastDTO;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

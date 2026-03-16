@@ -1,19 +1,22 @@
 package com.gmail.arthurstrokov.weather.service;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.wiremock.spring.EnableWireMock;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@SpringBootTest(
+        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
+        properties = "spring.autoconfigure.exclude=org.telegram.telegrambots.longpolling.starter.TelegramBotStarterConfiguration"
+)
+@EnableWireMock
 class PromptServiceTest {
 
+    @Autowired
     private PromptService promptService;
-
-    @BeforeEach
-    void setUp() {
-        promptService = new PromptService();
-    }
 
     @Test
     @DisplayName("Should generate prompt with city and context")

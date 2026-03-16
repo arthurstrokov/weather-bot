@@ -2,16 +2,10 @@ package com.gmail.arthurstrokov.weather.configuration;
 
 import feign.RequestInterceptor;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
-import org.wiremock.spring.EnableWireMock;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest(
-        properties = "spring.autoconfigure.exclude=org.telegram.telegrambots.longpolling.starter.TelegramBotStarterConfiguration"
-)
-@EnableWireMock
 class OllamaFeignConfigTest {
 
     private final ApplicationContextRunner contextRunner =

@@ -1,5 +1,5 @@
 plugins {
-    id 'org.springframework.boot' version '3.4.3'
+    id 'org.springframework.boot' version '4.0.3'
     id 'io.spring.dependency-management' version '1.1.7'
     id 'java'
     id 'jacoco'
@@ -10,7 +10,7 @@ version = '0.0.1-SNAPSHOT'
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
+        languageVersion = JavaLanguageVersion.of(25)
     }
 }
 
@@ -25,8 +25,8 @@ repositories {
 }
 
 ext {
-    set('springCloudVersion', "2024.0.0")
-    set('springAiVersion', "1.0.0")
+    set('springCloudVersion', "2025.1.1")
+    set('springAiVersion', "2.0.0-M2")
 }
 
 dependencies {
@@ -48,14 +48,14 @@ dependencies {
     implementation 'org.springframework.ai:spring-ai-starter-mcp-server-webmvc'
     implementation 'org.springframework.ai:spring-ai-starter-model-ollama'
     // Lombok (compile-time code generation)
-    compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
+    compileOnly 'org.projectlombok:lombok:1.18.44'
+    annotationProcessor 'org.projectlombok:lombok:1.18.44'
     // Lombok for tests (optional)
-    testCompileOnly 'org.projectlombok:lombok'
-    testAnnotationProcessor 'org.projectlombok:lombok'
+    testCompileOnly 'org.projectlombok:lombok:1.18.44'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.44'
     // Testing
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.wiremock.integrations:wiremock-spring-boot:3.10.6'
+    testImplementation 'org.wiremock.integrations:wiremock-spring-boot:4.2.1'
 }
 
 dependencyManagement {

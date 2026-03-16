@@ -20,7 +20,7 @@ import java.util.List;
 import static com.gmail.arthurstrokov.weather.util.StubHelper.stubForGetREST;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@EnabledIfEnvironmentVariable(named = "test.implementation", matches = "local")
+@EnabledIfEnvironmentVariable(named = "test", matches = "local")
 @Slf4j
 @SpringBootTest(
         properties = "spring.autoconfigure.exclude=org.telegram.telegrambots.longpolling.starter.TelegramBotStarterConfiguration"
@@ -69,7 +69,8 @@ class WeatherServiceTest {
                 List.of(new Document(criteria)),
                 minsk);
 
-        FactCheckingEvaluator evaluator = new FactCheckingEvaluator(ChatClient.builder(chatModel));
+        FactCheckingEvaluator evaluator = FactCheckingEvaluator.builder(ChatClient.builder(chatModel)).build();
+
         EvaluationResponse response = evaluator.evaluate(request);
 
         assertTrue(response.isPass(), () -> "LLM evaluation failed: " + response.isPass());

@@ -14,7 +14,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@EnabledIfEnvironmentVariable(named = "test.implementation", matches = "local")
+@EnabledIfEnvironmentVariable(named = "test", matches = "local")
 @ExtendWith(MockitoExtension.class)
 class LocalChatGatewayTest {
 

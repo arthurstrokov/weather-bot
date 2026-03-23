@@ -1,12 +1,12 @@
 # Weather Bot
 
-A Spring Boot 3 application that exposes REST endpoints and a Telegram long‑polling bot to deliver current weather data
+A Spring Boot 4.0.4 application that exposes REST endpoints and a Telegram long‑polling bot to deliver current weather data
 and short‑term forecasts using the OpenWeather API. The app can optionally use a local or remote Ollama model (via
 Spring AI or Feign) to enrich textual responses, and provides Prometheus metrics via Spring Boot Actuator.
 
 ## Stack
 
-- Language: Java 21
+- Language: Java 25 (JDK 25+)
 - Build tool / package manager: Gradle (wrapper included)
 - Frameworks & libraries:
     - Spring Boot 4.0.4 (Web, Actuator)
@@ -27,7 +27,7 @@ Spring AI or Feign) to enrich textual responses, and provides Prometheus metrics
 
 ## Requirements
 
-- JDK 21+
+- JDK 25+
 - Internet access to OpenWeather API
 - Telegram bot credentials (from BotFather)
 - Optional: Local Ollama runtime if you use the "local" chat implementation (default Spring AI base
@@ -167,7 +167,7 @@ Common Gradle tasks
 
 ## Project Structure (high level)
 
-- build.gradle — dependencies and build configuration (Java toolchain 21; bootJar name = weather-bot.jar)
+- build.gradle — dependencies and build configuration (Java toolchain 25; bootJar name = weather-bot.jar)
 - Dockerfile — multi-stage build and runtime (EXPOSE/ENV PORT=8080)
 - src/main/java/com/gmail/arthurstrokov/weather/
     - Application.java — Spring Boot entry point

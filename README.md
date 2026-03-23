@@ -198,6 +198,8 @@ Common Gradle tasks
 - **Testing**: Updated tests to work with Records (constructor-based initialization, accessor methods).
 - **ModelResponse Fix**: Fixed deserialization issue by changing primitive `long` fields to `Long` wrapper types in
   `ModelResponse` class to handle null values from Ollama API responses. Updated corresponding test cases.
+- **Regression Tests**: Added comprehensive `ModelResponseTest` with scenarios for null, non-null, and mixed Long field
+  values to prevent future deserialization issues.
 
 ## Observability
 

@@ -45,7 +45,6 @@ dependencies {
     implementation 'org.telegram:telegrambots-client:9.3.0'
     implementation 'com.google.code.gson:gson:2.13.2'
     // Spring AI
-    implementation 'org.springframework.ai:spring-ai-starter-mcp-server-webmvc'
     implementation 'org.springframework.ai:spring-ai-starter-model-ollama'
     // Lombok (compile-time code generation)
     compileOnly 'org.projectlombok:lombok:1.18.44'

@@ -11,7 +11,7 @@ Spring AI or Feign) to enrich textual responses, and provides Prometheus metrics
 - Frameworks & libraries:
     - Spring Boot 4.0.4 (Web, Actuator)
     - Spring Cloud 2025.1.1 (OpenFeign for HTTP clients)
-    - Spring AI 2.0.0-M3 (MCP Server WebMVC, Ollama model client)
+    - Spring AI 2.0.0-M3 (Ollama model client)
     - TelegramBots long‑polling starter (9.3.0)
     - Micrometer + Prometheus registry
     - Java Records (for immutable DTOs)

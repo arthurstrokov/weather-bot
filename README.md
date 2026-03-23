@@ -177,6 +177,7 @@ Common Gradle tasks
     - client/ — Feign clients (OpenWeatherClient, OllamaClient)
     - gateway/ — app gateways (WeatherGateway, LocalChatGateway, RemoteChatGateway)
     - dto/ — immutable DTOs (Java Records) for weather data
+    - model/ — model classes including ModelResponse (Ollama API response DTO with Long fields for null safety)
     - service/ — business services (BotService, PromptService, WeatherService)
     - template/PromptTemplate.java — AI prompt templates
     - tool/WeatherTool.java — tool integration for AI
@@ -195,6 +196,8 @@ Common Gradle tasks
 - **DTO Refactoring**: All DTOs have been converted to Java Records for immutability and cleaner code. Removed Lombok
   dependencies for DTO layer.
 - **Testing**: Updated tests to work with Records (constructor-based initialization, accessor methods).
+- **ModelResponse Fix**: Fixed deserialization issue by changing primitive `long` fields to `Long` wrapper types in
+  `ModelResponse` class to handle null values from Ollama API responses. Updated corresponding test cases.
 
 ## Observability
 

@@ -11,7 +11,8 @@ Spring AI or Feign) to enrich textual responses, and provides Prometheus metrics
 - Frameworks & libraries:
     - Spring Boot 4.0.4 (Web, Actuator)
     - Spring Cloud 2025.1.1 (OpenFeign for HTTP clients)
-    - Spring AI 2.0.0-M3 (Ollama model client)
+    - Spring AI 2.0.0-M3 (Ollama model client via Spring AI ChatModel)
+    - OpenFeign (for remote Ollama API calls)
     - TelegramBots long‑polling starter (9.3.0)
     - Micrometer + Prometheus registry
     - Java Records (for immutable DTOs)
@@ -62,8 +63,6 @@ Ollama / AI
   ollama.base-url)
 - OLLAMA_API_KEY — Optional API key for remote Ollama if required (property key: ollama.api-key)
 - Models and options have defaults in application.yml (e.g., chat model gpt-oss:20b; temperature, top-p).
-    - TODO: Externalize all Spring AI options (temperature, top-p, model names) as dedicated environment variables if
-      needed for deployment.
 
 ## Endpoints
 
@@ -171,8 +170,7 @@ Common Gradle tasks
 - Dockerfile — multi-stage build and runtime (EXPOSE/ENV PORT=8080)
 - src/main/java/com/gmail/arthurstrokov/weather/
     - Application.java — Spring Boot entry point
-    - configuration/ — configuration properties and beans (BotProperties, OpenWeatherProperties, OllamaFeignConfig,
-      ToolConfiguration)
+    - configuration/ — configuration properties and beans (BotProperties, OpenWeatherProperties, OllamaFeignConfig)
     - controller/WeatherController.java — REST endpoints
     - client/ — Feign clients (OpenWeatherClient, OllamaClient)
     - gateway/ — app gateways (WeatherGateway, LocalChatGateway, RemoteChatGateway)
@@ -180,7 +178,6 @@ Common Gradle tasks
     - model/ — model classes including ModelResponse (Ollama API response DTO with Long fields for null safety)
     - service/ — business services (BotService, PromptService, WeatherService)
     - template/PromptTemplate.java — AI prompt templates
-    - tool/WeatherTool.java — tool integration for AI
 - src/main/resources/
     - application.yml — app configuration (server port, bot, open weather, AI, actuator/metrics)
     - bootstrap.yml — Spring bootstrap config (if used)
@@ -188,8 +185,9 @@ Common Gradle tasks
 
 ## API Notes
 
-- Default city used by bot commands: Minsk (see open.weather.parameters.city in application.yml)
-- Units: metric; Language: en; Forecast count: 4 (see application.yml)
+- Default city used by bot commands: Minsk (configurable via open.weather.parameters.city in application.yml)
+- Units: metric; Language: en; Forecast count: 4 (all configurable in application.yml)
+- Response format: JSON with weather data structures documented in DTO classes
 
 ## Recent Changes
 

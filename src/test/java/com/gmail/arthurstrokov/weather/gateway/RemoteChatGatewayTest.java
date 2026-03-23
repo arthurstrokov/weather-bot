@@ -50,7 +50,7 @@ class RemoteChatGatewayTest {
                 Instant.now(),
                 message,
                 true,
-                0, 0, 0, 0, 0, 0
+                0L, 0L, 0, 0L, 0, 0L
         );
         when(ollamaClient.chat(any(ModelRequest.class))).thenReturn(modelResponse);
         // when
@@ -75,7 +75,7 @@ class RemoteChatGatewayTest {
                 Instant.now(),
                 message,
                 true,
-                0, 0, 0, 0, 0, 0
+                0L, 0L, 0, 0L, 0, 0L
         );
         when(ollamaClient.chat(any(ModelRequest.class))).thenReturn(modelResponse);
         // when

@@ -9,13 +9,13 @@ Spring AI or Feign) to enrich textual responses, and provides Prometheus metrics
 - Language: Java 21
 - Build tool / package manager: Gradle (wrapper included)
 - Frameworks & libraries:
-    - Spring Boot 3.4.x (Web, Actuator)
-    - Spring Cloud OpenFeign (HTTP clients)
-    - Spring AI (MCP Server WebMVC, Ollama model client)
-    - TelegramBots long‑polling starter (9.2.0)
+    - Spring Boot 4.0.4 (Web, Actuator)
+    - Spring Cloud 2025.1.1 (OpenFeign for HTTP clients)
+    - Spring AI 2.0.0-M3 (MCP Server WebMVC, Ollama model client)
+    - TelegramBots long‑polling starter (9.3.0)
     - Micrometer + Prometheus registry
     - Java Records (for immutable DTOs)
-    - Testing: JUnit 5, Spring Boot Test, WireMock
+    - Testing: JUnit 5, Spring Boot Test, WireMock 4.2.1
 - Container: Dockerfile provided
 
 ## Overview
@@ -200,6 +200,8 @@ Common Gradle tasks
   `ModelResponse` class to handle null values from Ollama API responses. Updated corresponding test cases.
 - **Regression Tests**: Added comprehensive `ModelResponseTest` with scenarios for null, non-null, and mixed Long field
   values to prevent future deserialization issues.
+- **Dependency Updates**: Upgraded Spring Boot (4.0.3 → 4.0.4), Spring AI (2.0.0-M2 → 2.0.0-M3), and Gson (2.12.0 → 2.13.2)
+  to latest stable versions for improved performance, security, and features.
 
 ## Observability
 

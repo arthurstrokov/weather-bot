@@ -52,7 +52,7 @@ public class WeatherGateway {
                 openWeatherProperties.getCnt(),
                 openWeatherProperties.getOpenApiKey()
         );
-        log.debug("Forecast response for {}: {} entries", city, forecast.getCnt());
+        log.debug("Forecast response for {}: {} entries", city, forecast.cnt());
         return gson.toJson(forecast);
     }
 
@@ -66,7 +66,7 @@ public class WeatherGateway {
                 openWeatherProperties.getCnt(),
                 openWeatherProperties.getOpenApiKey()
         );
-        log.debug("Forecast response for coordinates ({}, {}): {} entries", latitude, longitude, forecast.getCnt());
+        log.debug("Forecast response for coordinates ({}, {}): {} entries", latitude, longitude, forecast.cnt());
         return gson.toJson(forecast);
     }
 }

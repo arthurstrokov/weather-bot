@@ -4,6 +4,8 @@ import com.gmail.arthurstrokov.weather.client.OpenWeatherClient;
 import com.gmail.arthurstrokov.weather.properties.OpenWeatherProperties;
 import com.gmail.arthurstrokov.weather.dto.WeatherForecastDTO;
 import com.google.gson.Gson;
+
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -78,9 +80,7 @@ class WeatherGatewayTest {
     void getWeatherForecastByCity() {
         // given
         String city = "Minsk";
-        WeatherForecastDTO forecastDto = new WeatherForecastDTO();
-        forecastDto.setCod("200");
-        forecastDto.setCnt(4);
+        WeatherForecastDTO forecastDto = new WeatherForecastDTO("200", 0, 4, List.of(), null);
         when(openWeatherProperties.getMode()).thenReturn("json");
         when(openWeatherProperties.getUnits()).thenReturn("metric");
         when(openWeatherProperties.getLang()).thenReturn("en");
@@ -94,7 +94,7 @@ class WeatherGatewayTest {
         Gson gson = new Gson();
         WeatherForecastDTO parsed = gson.fromJson(result, WeatherForecastDTO.class);
         assertThat(parsed)
-                .extracting(WeatherForecastDTO::getCod, WeatherForecastDTO::getCnt)
+                .extracting(WeatherForecastDTO::cod, WeatherForecastDTO::cnt)
                 .containsExactly("200", 4);
         ArgumentCaptor<String> cityCaptor = ArgumentCaptor.forClass(String.class);
         verify(openWeatherClient).getWeatherForecastByCity(
@@ -114,9 +114,7 @@ class WeatherGatewayTest {
         // given
         double lat = 53.9;
         double lon = 27.5667;
-        WeatherForecastDTO forecastDto = new WeatherForecastDTO();
-        forecastDto.setCod("200");
-        forecastDto.setCnt(4);
+        WeatherForecastDTO forecastDto = new WeatherForecastDTO("200", 0, 4, List.of(), null);
         when(openWeatherProperties.getMode()).thenReturn("json");
         when(openWeatherProperties.getUnits()).thenReturn("metric");
         when(openWeatherProperties.getLang()).thenReturn("en");
